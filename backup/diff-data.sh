@@ -1,11 +1,10 @@
 function diff-data() {
-    data_dir=/home/yankov/data
-    install_dir=/home/yankov/install
-    vms_dir=/home/yankov/vbvms
-    
-    backup_dir=/media/yankov/Backup
-    
-    diff -qr $data_dir $backup_dir
-    diff -qr $install_dir $backup_dir
-    diff -qr $vms_dir $backup_dir
+    src_dirs=(/home/yankov/data /home/yankov/Desktop /home/yankov/install /home/yankov/vbvms)
+    dest_dir=/media/yankov/Backup
+
+    for i in "${src_dirs[@]}"
+    do
+        echo Processing directory: $i
+        diff -qr $i $dest_dir
+    done
 }

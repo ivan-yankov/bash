@@ -1,13 +1,12 @@
 function backup-data() {
-    data_dir=/home/yankov/data
-    install_dir=/home/yankov/install
-    vms_dir=/home/yankov/vbvms
-    
-    backup_dir=/media/yankov/Backup
-    
-    rsync --delete --inplace -a $data_dir $backup_dir
-    rsync --delete --inplace -a $install_dir $backup_dir
-    rsync --delete --inplace -a $vms_dir $backup_dir
-    
+    src_dirs=(/home/yankov/data /home/yankov/Desktop /home/yankov/install /home/yankov/vbvms)
+    dest_dir=/media/yankov/Backup
+
+    for i in "${src_dirs[@]}"
+    do
+        echo Processing directory: $i
+        rsync --delete --inplace -a $i $dest_dir
+    done
+
     echo "Backup complete"
 }
