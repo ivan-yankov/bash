@@ -1,4 +1,4 @@
-function install-glassfish() {
+function install-glassfish {
     server=glassfish-4.1
     src_file=/home/yankov/install/java/servers/$server.zip
     dest_dir=/opt

@@ -1,4 +1,4 @@
-function install-jdk() {
+function install-jdk {
     jdk=jdk1.8.0_161
     jdk_file=/home/yankov/install/java/jdk/jdk-8u161-linux-x64.tar.gz
     dest_dir=/opt

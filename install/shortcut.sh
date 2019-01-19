@@ -1,4 +1,4 @@
-function shortcut() {
+function shortcut {
 	if [ "$#" != "3" ]; then
         echo "Arguments: shortcut-name execution-file icon-file"
         return

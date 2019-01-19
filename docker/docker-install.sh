@@ -1,4 +1,4 @@
-function docker-install() {
+function docker-install {
     # Install Docker
     sudo apt install docker-engine
     

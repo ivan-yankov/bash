@@ -1,4 +1,4 @@
-function docker-remove-none-images() {
+function docker-remove-none-images {
     # Remove all containers
     docker rm $(docker ps -a -q)
     

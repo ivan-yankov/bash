@@ -1,4 +1,4 @@
-function docker-prepare-installation() {
+function docker-prepare-installation {
     # First import the GPG key
     sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 \
           --recv-keys 58118E89F3A912897C070ADBF76221572C52609D

@@ -1,4 +1,4 @@
-function install-eclipse() {
+function install-eclipse {
     ide=eclipse-jee-neon
     src_file=/home/yankov/install/java/eclipse/eclipse-jee-neon-2-linux-gtk-x86_64.tar.gz
     dest_dir=/opt/$ide

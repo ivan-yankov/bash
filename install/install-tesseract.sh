@@ -1,4 +1,4 @@
-function install-tesseract.sh() {
+function install-tesseract {
     bul=/home/yankov/install/tesseract/tesseract-ocr-3.02.bul.tar.gz
     rus=/home/yankov/install/tesseract/tesseract-ocr-3.02.rus.tar.gz
     

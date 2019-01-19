@@ -1,4 +1,4 @@
-function install-tomcat() {
+function install-tomcat {
     server=tomcat-8.0.20
     src_file=/home/yankov/install/java/servers/$server.zip
     dest_dir=/opt

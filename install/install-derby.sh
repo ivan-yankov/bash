@@ -1,4 +1,4 @@
-function install-derby() {
+function install-derby {
     version=db-derby-10.14.1.0-bin
     src_file=/home/yankov/install/java/db-derby/db-derby-10.14.1.0-bin.tar.gz
     dest_dir=/opt

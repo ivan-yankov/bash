@@ -1,4 +1,4 @@
-function install-netbeans() {
+function install-netbeans {
     jdk_path=/opt/jdk1.8.0_161
     src_dir=/home/yankov/install/java/netbeans
     netbeans=netbeans-8.0.2

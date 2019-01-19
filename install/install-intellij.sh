@@ -1,4 +1,4 @@
-function install-intellij() {
+function install-intellij {
     ide=idea-IC-181.4203.550
     src_file=/home/yankov/install/java/intellij/ideaIC-2018.1.tar.gz
     dest_dir=/opt

@@ -1,4 +1,4 @@
-function docker-uninstall() {
+function docker-uninstall {
     sudo apt remove -y docker-engine
     sudo apt autoremove
     sudo apt autoclean

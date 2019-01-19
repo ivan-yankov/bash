@@ -1,4 +1,4 @@
-function docker-clear() {
+function docker-clear {
     # Remove all containers
     docker rm $(docker ps -a -q)
     

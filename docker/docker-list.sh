@@ -1,4 +1,4 @@
-function docker-list() {
+function docker-list {
     echo
     echo "Containers:"
     docker container ls

@@ -1,3 +1,3 @@
-function install-flac() {
+function install-flac {
     sudo apt-get install flac
 }

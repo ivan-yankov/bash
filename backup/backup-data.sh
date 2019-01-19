@@ -1,4 +1,4 @@
-function backup-data() {
+function backup-data {
     src_dirs=(/home/yankov/data /home/yankov/Desktop /home/yankov/install /home/yankov/vbvms)
     dest_dir=/media/yankov/Backup
 
