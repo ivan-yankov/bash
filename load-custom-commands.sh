@@ -24,6 +24,7 @@ source /home/yankov/data/BashScripts/install/install-jdk.sh
 source /home/yankov/data/BashScripts/install/install-mysql.sh
 source /home/yankov/data/BashScripts/install/install-netbeans.sh
 source /home/yankov/data/BashScripts/install/install-stickynotes.sh
+source /home/yankov/data/BashScripts/install/install-systemback.sh
 source /home/yankov/data/BashScripts/install/install-tesseract.sh
 source /home/yankov/data/BashScripts/install/install-tomcat.sh
 source /home/yankov/data/BashScripts/install/shortcut.sh
