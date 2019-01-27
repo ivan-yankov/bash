@@ -1,5 +1,7 @@
 install_scripts_folder=/home/yankov/data/BashScripts/install
 
+source /home/yankov/data/BashScripts/export-path.sh
+
 source /home/yankov/data/BashScripts/system/clean-system.sh
 
 source /home/yankov/data/BashScripts/backup/backup-data.sh
@@ -13,7 +15,6 @@ source /home/yankov/data/BashScripts/docker/docker-prepare-installation.sh
 source /home/yankov/data/BashScripts/docker/docker-remove-none-images.sh
 source /home/yankov/data/BashScripts/docker/docker-uninstall.sh
 
-source /home/yankov/data/BashScripts/install/initialize-dotnet-core.sh
 source /home/yankov/data/BashScripts/install/install-audacity.sh
 source /home/yankov/data/BashScripts/install/install-derby.sh
 source /home/yankov/data/BashScripts/install/install-eclipse.sh
