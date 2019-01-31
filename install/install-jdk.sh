@@ -5,8 +5,6 @@ function install-jdk {
     
     sudo tar -xvzf $jdk_file --directory $dest_dir
     
-    sudo python $install_scripts_folder/set-java-var.py $dest_dir/$jdk
-    
     sudo update-alternatives --install /usr/bin/java java $dest_dir/$jdk/jre/bin/java 1
     sudo update-alternatives --config java
     

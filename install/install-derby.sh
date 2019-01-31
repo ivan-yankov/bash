@@ -10,7 +10,5 @@ function install-derby {
     
     sudo chown --recursive yankov $dest_dir/$ide
     
-    sudo python $install_scripts_folder/set-derby-var.py $dest_dir/$ide
-    
     echo "Installation successful"
 }
