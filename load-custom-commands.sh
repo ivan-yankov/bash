@@ -3,6 +3,7 @@ install_scripts_folder=/home/yankov/data/BashScripts/install
 source /home/yankov/data/BashScripts/export-path.sh
 
 source /home/yankov/data/BashScripts/system/clean-system.sh
+source /home/yankov/data/BashScripts/system/create-shortcut.sh
 
 source /home/yankov/data/BashScripts/backup/backup-data.sh
 source /home/yankov/data/BashScripts/backup/backup-folklore.sh
@@ -28,4 +29,3 @@ source /home/yankov/data/BashScripts/install/install-stickynotes.sh
 source /home/yankov/data/BashScripts/install/install-systemback.sh
 source /home/yankov/data/BashScripts/install/install-tesseract.sh
 source /home/yankov/data/BashScripts/install/install-tomcat.sh
-source /home/yankov/data/BashScripts/install/shortcut.sh
