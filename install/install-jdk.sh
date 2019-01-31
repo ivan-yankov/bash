@@ -1,6 +1,11 @@
 function install-jdk {
-    jdk=jdk1.8.0_161
-    jdk_file=/home/yankov/install/java/jdk/jdk-8u161-linux-x64.tar.gz
+    if [ "$#" != "2" ]; then
+        echo "Arguments: jdk-name jdk-file"
+        return
+    fi
+
+    jdk=$1
+    jdk_file=$2
     dest_dir=/opt
     
     sudo tar -xvzf $jdk_file --directory $dest_dir

@@ -1,5 +1,5 @@
 function backup-folklore {
-	if [ "$#" != "1" ]; then
+    if [ "$#" != "1" ]; then
         echo "Arguments: destination-folder"
         return
     fi
