@@ -6,8 +6,8 @@ source /home/yankov/data/BashScripts/system/clean-system.sh
 source /home/yankov/data/BashScripts/system/create-shortcut.sh
 
 source /home/yankov/data/BashScripts/backup/backup-data.sh
-source /home/yankov/data/BashScripts/backup/backup-folklore.sh
 source /home/yankov/data/BashScripts/backup/diff-data.sh
+source /home/yankov/data/BashScripts/backup/syncdir.sh
 
 source /home/yankov/data/BashScripts/docker/docker-clear.sh
 source /home/yankov/data/BashScripts/docker/docker-install.sh
