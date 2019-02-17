@@ -1,3 +1,6 @@
+export BASH_SCRIPTS=/home/yankov/data/Repos/bash
+export PATH=$PATH:$BASH_SCRIPTS
+
 export JAVA_HOME=/opt/jdk1.8.0_161
 export PATH=$PATH:$JAVA_HOME
 
