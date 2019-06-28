@@ -27,3 +27,5 @@ source $BASH_SCRIPTS/install/install-stickynotes.sh
 source $BASH_SCRIPTS/install/install-systemback.sh
 source $BASH_SCRIPTS/install/install-tesseract.sh
 source $BASH_SCRIPTS/install/install-tomcat.sh
+
+source $BASH_SCRIPTS/alias/sweet-home.sh
