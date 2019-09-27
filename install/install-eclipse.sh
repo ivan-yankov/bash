@@ -1,14 +1,19 @@
 function install-eclipse {
-    ide=eclipse-jee-neon
-    src_file=/home/yankov/install/java/eclipse/eclipse-jee-neon-2-linux-gtk-x86_64.tar.gz
+    if [ "$#" -ne 1 ]; then
+        echo "Arguments: file"
+        return
+    fi
+    
+    src_file=$1
+    ide=$(basename $src_file .tar.gz)
     dest_dir=/opt/$ide
     
     mkdir -p $dest_dir
     sudo tar -xvzf $src_file --directory $dest_dir
     
-    sudo shortcut $ide $dest_dir/eclipse/eclipse $dest_dir/eclipse/icon.xpm
+    create-shortcut $ide $dest_dir/eclipse/eclipse $dest_dir/eclipse/icon.xpm
     
-    sudo chown --recursive yankov $dest_dir/eclipse
+    sudo chown --recursive yankov $dest_dir
     
     echo "Installation successful"
 }

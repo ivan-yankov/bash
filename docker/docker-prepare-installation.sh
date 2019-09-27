@@ -14,5 +14,5 @@ function docker-prepare-installation {
     
     echo
     echo "Reboot the system so it would be running on the newly installed kernel image."
-    echo "After rebooting run 'install-docker.sh'."
+    echo "After rebooting run 'docker-install.sh'."
 }
