@@ -7,7 +7,7 @@ function syncdir {
     src=$1
     dest=$2
 
-    rsync --delete --inplace -a $src $dest
+    rsync --delete --inplace -a $src/ $dest
     
     echo "Sync complete"
 }
