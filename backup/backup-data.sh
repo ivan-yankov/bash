@@ -5,7 +5,7 @@ function backup-data {
     for i in "${src_dirs[@]}"
     do
         echo Processing directory: $i
-        rsync --delete --inplace -a $i $dest_dir
+        sudo rsync --delete --inplace -a $i $dest_dir
     done
 
     echo "Backup complete"
