@@ -1,6 +1,6 @@
 function install-jdk {
     if [ "$#" != "2" ]; then
-        echo "Arguments: jdk-name jdk-file"
+        echo "install-jdk <jdk-name> <jdk-file>"
         return
     fi
 

@@ -1,6 +1,6 @@
 function create-shortcut {
 	if [ "$#" != "3" ]; then
-        echo "Arguments: shortcut-name execution-file icon-file"
+        echo "create-shortcut <shortcut-name> <execution-file> <icon-file>"
         return
     fi
 

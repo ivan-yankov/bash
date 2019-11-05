@@ -1,6 +1,6 @@
 function syncdir {
     if [ "$#" != "2" ]; then
-        echo "Arguments: src dest"
+        echo "syncdir <src> <dest>"
         return
     fi
 
