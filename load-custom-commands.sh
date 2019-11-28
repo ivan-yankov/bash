@@ -16,15 +16,10 @@ source $BASH_SCRIPTS/docker/docker-uninstall.sh
 
 source $BASH_SCRIPTS/install/install-audacity.sh
 source $BASH_SCRIPTS/install/install-derby.sh
-source $BASH_SCRIPTS/install/install-eclipse.sh
 source $BASH_SCRIPTS/install/install-flac.sh
 source $BASH_SCRIPTS/install/install-glassfish.sh
-source $BASH_SCRIPTS/install/install-intellij.sh
 source $BASH_SCRIPTS/install/install-jdk.sh
 source $BASH_SCRIPTS/install/install-mysql.sh
-source $BASH_SCRIPTS/install/install-netbeans.sh
-source $BASH_SCRIPTS/install/install-stickynotes.sh
-source $BASH_SCRIPTS/install/install-systemback.sh
 source $BASH_SCRIPTS/install/install-tesseract.sh
 source $BASH_SCRIPTS/install/install-tomcat.sh
 
