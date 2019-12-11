@@ -1,6 +1,11 @@
 function install-tomcat {
-    server=tomcat-8.0.20
-    src_file=/home/yankov/install/java/servers/$server.zip
+    if [ "$#" != "2" ]; then
+        echo "install-tomcat <server-name> <file>"
+        return
+    fi
+
+    server=$1
+    src_file=$2
     dest_dir=/opt
     
     sudo unzip $src_file -d $dest_dir

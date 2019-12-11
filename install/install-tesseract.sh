@@ -1,6 +1,11 @@
 function install-tesseract {
-    bul=/home/yankov/install/tesseract/tesseract-ocr-3.02.bul.tar.gz
-    rus=/home/yankov/install/tesseract/tesseract-ocr-3.02.rus.tar.gz
+    if [ "$#" != "2" ]; then
+        echo "install-tesseract <bul-archive> <rus-archive>"
+        return
+    fi
+
+    bul=$1
+    rus=$2
     
     dest_dir=/usr/share/tesseract-ocr/tessdata
     

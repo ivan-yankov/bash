@@ -1,12 +1,11 @@
 function docker-install {
 	location=/var/lib/docker
-	user=yankov
 	
     # install docker
     sudo apt install docker-engine
     
     # add user to the docker group (this is to avoid running all docker commands with sudo)
-    sudo usermod -a -G docker $user
+    sudo usermod -a -G docker $USER
     
     sudo chown --recursive $user $location/
     

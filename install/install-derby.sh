@@ -1,6 +1,11 @@
 function install-derby {
-    version=db-derby-10.14.1.0-bin
-    src_file=/home/yankov/install/java/db-derby/db-derby-10.14.1.0-bin.tar.gz
+    if [ "$#" != "2" ]; then
+        echo "install-derby <version> <file>"
+        return
+    fi
+
+    version=$1
+    src_file=$2
     dest_dir=/opt
     
     sudo tar -xvzf $src_file --directory $dest_dir

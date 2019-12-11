@@ -8,7 +8,7 @@ function create-shortcut {
     execution_file=$2
     icon_file=$3
     
-    file=/home/yankov/Desktop/$shortcut_name.desktop
+    file=~/Desktop/$shortcut_name.desktop
 
     echo "[Desktop Entry]" >> $file
     echo "Name="$shortcut_name >> $file

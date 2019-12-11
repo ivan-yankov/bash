@@ -1,5 +1,5 @@
 function diff-data {
-    src_dirs=(/home/yankov/data /home/yankov/Desktop /home/yankov/install /home/yankov/vbvms)
+    src_dirs=(~/data ~/install)
     dest_dir=/media/yankov/Backup
 
     for i in "${src_dirs[@]}"
