@@ -7,13 +7,9 @@ function docker-install {
     
     sudo apt install linux-image-generic linux-image-extra-virtual
     
-    location=/var/lib/docker
-	
     sudo apt install docker-engine
     
     sudo usermod -a -G docker $USER
-    
-    sudo chown --recursive $user $location/
     
     echo
     echo "Docker installation completed"
