@@ -10,7 +10,6 @@ source $BASH_SCRIPTS/backup/syncdir.sh
 source $BASH_SCRIPTS/docker/docker-clear.sh
 source $BASH_SCRIPTS/docker/docker-install.sh
 source $BASH_SCRIPTS/docker/docker-list.sh
-source $BASH_SCRIPTS/docker/docker-prepare-installation.sh
 source $BASH_SCRIPTS/docker/docker-remove-none-images.sh
 source $BASH_SCRIPTS/docker/docker-uninstall.sh
 
