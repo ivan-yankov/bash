@@ -8,6 +8,4 @@ function syncdir {
     dest=$2
 
     sudo rsync --delete --inplace -a $src/ $dest
-    
-    echo "Sync complete"
 }
