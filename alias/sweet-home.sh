@@ -1,1 +1,0 @@
-alias sweet-home='/opt/sweet-home/SweetHome3D-Java3D-1_5_2'
