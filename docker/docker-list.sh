@@ -1,7 +1,7 @@
 function docker-list {
     echo
     echo "Containers:"
-    docker container ls
+    docker ps -a
     
     echo
     echo "Images:"
