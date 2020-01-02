@@ -7,7 +7,7 @@ function create-shortcut {
     shortcut_name=$1
     execution_file=$2
     icon_file=$3
-    
+
     file=~/Desktop/$shortcut_name.desktop
 
     echo "[Desktop Entry]" >> $file
