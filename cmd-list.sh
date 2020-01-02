@@ -12,11 +12,11 @@ function cmd-list {
         done
     done
 
-    echo
-    echo "Aliases:"
-    echo "--------"
     aliases_file=$BASH_SCRIPTS/aliases.sh
     if [ -f "$aliases_file" ]; then
+        echo
+        echo "Aliases:"
+        echo "--------"
         cat $aliases_file
     fi
 }
