@@ -1,4 +1,5 @@
 function cmd-list {
+    echo "Commands:"
     for dir in $BASH_SCRIPTS/*/
     do
         for file in $dir*
@@ -9,4 +10,11 @@ function cmd-list {
             fi
         done
     done
+
+    echo
+    echo "Aliases:"
+    aliases_file=$BASH_SCRIPTS/aliases.sh
+    if [ -f "$aliases_file" ]; then
+        cat $aliases_file
+    fi
 }
