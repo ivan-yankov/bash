@@ -4,7 +4,4 @@ function docker-uninstall {
     sudo apt autoclean
 
     sudo rm -rf /var/lib/docker
-
-    echo
-    echo "Docker uninstalled"
 }

@@ -13,6 +13,4 @@ function install-tesseract {
 
     sudo tar -xvzf $bul --directory $dest_dir
     sudo tar -xvzf $rus --directory $dest_dir
-
-    echo "Installation successful"
 }
