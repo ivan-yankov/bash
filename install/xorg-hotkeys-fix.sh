@@ -3,6 +3,8 @@
 # on key-press instead of key-release
 # this prevents hotkeys with more than two keys
 # to work properly
-sudo apt-add-repository ppa:nrbrtx/xorg-hotkeys
-sudo apt update
-sudo apt dist-upgrade
+function xorg-hotkeys-fix {
+    sudo apt-add-repository ppa:nrbrtx/xorg-hotkeys
+    sudo apt update
+    sudo apt dist-upgrade
+}
