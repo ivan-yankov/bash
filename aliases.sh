@@ -1,0 +1,5 @@
+alias archive="tar -cvf "
+alias extract="tar -xvf "
+alias find-file="find . -name "
+alias find-dir="find . -type d -name "
+alias find-text="grep -rInH "
