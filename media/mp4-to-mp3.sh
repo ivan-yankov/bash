@@ -1,11 +1,10 @@
 function mp4-to-mp3 {
-    if [ "$#" != "2" ]; then
-        echo "mp4-to-mp3 <input> <output>"
+    if [ "$#" != "1" ]; then
+        echo "mp4-to-mp3 <input>"
         return
     fi
 
     input=$1
-    output=$2
-    
-    avconv -i $input $output
+
+    avconv -i $input $input.mp3
 }
