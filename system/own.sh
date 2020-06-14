@@ -1,11 +1,10 @@
 function own {
-    if [ "$#" != "1" ]; then
-        echo "own <file>"
-        return
-    fi
+  if [ "$#" != "1" ]; then
+    echo "own <file>"
+    return
+  fi
 
-    file=$1
+  file=$1
 
-    sudo chmod 755 $file
-    sudo chown --recursive $USER $file
+  sudo chown --recursive $USER $file
 }

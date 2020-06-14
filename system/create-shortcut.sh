@@ -1,23 +1,23 @@
 function create-shortcut {
 	if [ "$#" != "3" ]; then
-        echo "create-shortcut <shortcut-name> <execution-file> <icon-file>"
-        return
-    fi
+    echo "create-shortcut <shortcut-name> <execution-file> <icon-file>"
+    return
+  fi
 
-    shortcut_name=$1
-    execution_file=$2
-    icon_file=$3
+  shortcut_name=$1
+  execution_file=$2
+  icon_file=$3
 
-    file=~/Desktop/$shortcut_name.desktop
+  file=~/Desktop/$shortcut_name.desktop
 
-    echo "[Desktop Entry]" >> $file
-    echo "Name="$shortcut_name >> $file
-    echo "Comment=" >> $file
-    echo "Exec="$execution_file >> $file
-    echo "Icon="$icon_file >> $file
-    echo "Terminal=false" >> $file
-    echo "Type=Application" >> $file
+  echo "[Desktop Entry]" >> $file
+  echo "Name="$shortcut_name >> $file
+  echo "Comment=" >> $file
+  echo "Exec="$execution_file >> $file
+  echo "Icon="$icon_file >> $file
+  echo "Terminal=false" >> $file
+  echo "Type=Application" >> $file
 
-    chmod +x $file
-    chown yankov $file
+  chmod +x $file
+  chown $USER $file
 }

@@ -1,7 +1,7 @@
 function docker-uninstall {
-    sudo apt remove -y --purge docker-engine
-    sudo apt autoremove
-    sudo apt autoclean
+  sudo apt remove -y --purge docker-engine
+  sudo apt autoremove
+  sudo apt autoclean
 
-    sudo rm -rf /var/lib/docker
+  sudo rm -rf /var/lib/docker
 }
