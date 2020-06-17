@@ -13,13 +13,3 @@ do
     fi
   fi
 done
-
-for dir in $BASH_SCRIPTS/*/
-do
-  for file in $dir*
-  do
-    if [ ${file: -3} == ".sh" ]; then
-      source $file
-    fi
-  done
-done
