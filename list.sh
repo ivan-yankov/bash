@@ -1,6 +1,7 @@
 function cmds {
   echo "Commands:"
   echo "---------"
+  result=()
   for dir in $BASH_SCRIPTS/*
   do
     for file in $dir*
@@ -11,7 +12,7 @@ function cmds {
         for item in $items
         do
           if [ $flag == 1 ]; then
-            echo $item
+            result+=("$item")
             flag=0
           fi
           if [ $item == "function" ]; then
@@ -20,6 +21,15 @@ function cmds {
         done
       fi
     done
+  done
+
+  IFS=$'\n'
+  sorted=($(sort <<< "${result[*]}"))
+  unset IFS
+
+  for item in ${sorted[@]}
+  do
+    echo $item
   done
 }
 
