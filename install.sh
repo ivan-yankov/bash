@@ -1,6 +1,6 @@
 export MICRO_TEXT_EDITOR_DIR="/opt/bin"
 
-# fixes hotkeys in xorg used in linux mint 19.*
+# fixes hotkeys in xorg used in linux ubuntu
 # due to bug introduced hotkeys trigger happens
 # on key-press instead of key-release
 # this prevents hotkeys with more than two keys
