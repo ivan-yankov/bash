@@ -1,13 +1,17 @@
 function docker-install {
-  sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-
-  sudo apt-add-repository 'deb https://apt.dockerproject.org/repo ubuntu-xenial main'
-
+  # update the apt package index and install packages to allow apt to use a repository over https
   sudo apt update
+  sudo apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
 
-  sudo apt install linux-image-generic linux-image-extra-virtual
+  # add docker official gpg key
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
-  sudo apt install docker-engine
+  # setup stable repositopry
+  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+  # install docker engine
+  sudo apt update
+  sudo apt install docker-ce docker-ce-cli containerd.io
 
   sudo usermod -a -G docker $USER
 
@@ -17,10 +21,7 @@ function docker-install {
 }
 
 function docker-uninstall {
-  sudo apt remove -y --purge docker-engine
-  sudo apt autoremove
-  sudo apt autoclean
-
+  sudo apt purge docker-ce docker-ce-cli containerd.io
   sudo rm -rf /var/lib/docker
 }
 
