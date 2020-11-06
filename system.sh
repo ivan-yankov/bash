@@ -75,10 +75,11 @@ function syncdir {
   sudo rsync --delete --inplace -a $src/ $dest
 }
 
-function to-base64 {
-  echo -n '$1' | base64
+function base64-encode {
+  echo -n $1 | base64
 }
 
-function from-base64 {
-  echo '$1' | base64 --decode
+function base64-decode {
+  echo $1 | base64 --decode
+  echo
 }
