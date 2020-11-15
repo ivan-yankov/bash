@@ -22,37 +22,9 @@ function install-flac {
 }
 
 function install-tesseract {
-  BUL=~/data/install/tesseract/tesseract-ocr-3.02.bul.tar.gz
-  RUS=~/data/install/tesseract/tesseract-ocr-3.02.rus.tar.gz
-  ENG=~/data/install/tesseract/tesseract-ocr-3.02.eng.tar.gz
-
-  if [ ! -f "$BUL" ]; then
-    echo "$BUL file does not exist."
-    echo "Terminate."
-    return
-  fi
-
-  if [ ! -f "$RUS" ]; then
-    echo "$RUS file does not exist."
-    echo "Terminate."
-    return
-  fi
-
-  if [ ! -f "$ENG" ]; then
-    echo "$ENG file does not exist."
-    echo "Terminate."
-    return
-  fi
-
-  DEST_DIR=/usr/share/tesseract-ocr/tessdata
-
-  sudo apt install tesseract-ocr
-
-  sudo mkdir -p $DEST_DIR
-
-  sudo tar -xvzf $BUL --directory $DEST_DIR
-  sudo tar -xvzf $RUS --directory $DEST_DIR
-  sudo tar -xvzf $ENG --directory $DEST_DIR
+  sudo apt install -y tesseract-ocr
+  sudo apt install -y tesseract-ocr-bul
+  sudo apt install -y tesseract-ocr-rus
 }
 
 function install-openjfx {
