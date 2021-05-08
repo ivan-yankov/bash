@@ -83,3 +83,16 @@ function base64-decode {
   echo $1 | base64 --decode
   echo
 }
+
+function dvd-copy {
+  if [ "$#" != "1" ]; then
+    echo "syncdir <dest>"
+    return
+  fi
+  
+  dest=~/temp/$1
+  
+  mkdir -p $dest
+  sudo cp -r ./VIDEO_TS $dest
+  sudo chmod +rwx $dest/VIDEO_TS/
+}
