@@ -96,3 +96,11 @@ function dvd-copy {
   sudo cp -r ./VIDEO_TS $dest
   sudo chmod +rwx $dest/VIDEO_TS/
 }
+
+function external-drive-permissions {
+  if [ "$#" != "1" ]; then
+    echo "external-drive-permissions <path>"
+    return
+  fi
+  sudo chmod -R ugo+rwx $1
+}
