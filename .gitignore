@@ -1,2 +1,3 @@
 aliases-local.sh
 export-path.sh
+env.sh
