@@ -72,7 +72,7 @@ function syncdir {
   src=$1
   dest=$2
 
-  sudo rsync --delete --inplace -a $src/ $dest
+  sudo rsync --delete --inplace --checksum -a $src/ $dest
 }
 
 function base64-encode {
