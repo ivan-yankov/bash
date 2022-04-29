@@ -75,6 +75,18 @@ function syncdir {
   sudo rsync --delete --inplace --checksum -a $src/ $dest
 }
 
+function syncdir-quick {
+  if [ "$#" != "2" ]; then
+    echo "syncdir <src> <dest>"
+    return
+  fi
+
+  src=$1
+  dest=$2
+
+  sudo rsync --delete --inplace -a $src/ $dest
+}
+
 function base64-encode {
   echo -n $1 | base64
 }
