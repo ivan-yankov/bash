@@ -98,7 +98,7 @@ function base64-decode {
 
 function dvd-copy {
   if [ "$#" != "1" ]; then
-    echo "syncdir <dest>"
+    echo "dvd-copy <dest>"
     return
   fi
   
@@ -115,4 +115,27 @@ function external-drive-permissions {
     return
   fi
   sudo chmod -R ugo+rwx $1
+}
+
+function mount-usb {
+  if [ "$#" != "1" ]; then
+    echo "mount-usb <label>"
+    return
+  fi
+
+  local label=$1
+  local device=$(sudo blkid | grep $label)
+  local m=${device%:*}
+  sudo mkdir -p /media/$USER/$label
+  sudo mount $m /media/$USER/$label
+}
+
+function umount-usb {
+  if [ "$#" != "1" ]; then
+    echo "umount-usb <label>"
+    return
+  fi
+
+  sudo umount /media/$USER/$1
+  sudo rmdir /media/$USER/$1
 }
