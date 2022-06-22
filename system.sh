@@ -117,7 +117,7 @@ function external-drive-permissions {
   sudo chmod -R ugo+rwx $1
 }
 
-function mount-usb {
+function mount-drive {
   if [ "$#" != "1" ]; then
     echo "mount-usb <label>"
     return
@@ -130,7 +130,7 @@ function mount-usb {
   sudo mount $m /media/$USER/$label
 }
 
-function umount-usb {
+function umount-drive {
   if [ "$#" != "1" ]; then
     echo "umount-usb <label>"
     return
