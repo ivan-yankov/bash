@@ -41,14 +41,6 @@ function aliases {
     echo "--------"
     cat $aliases_file
   fi
-
-  local_aliases_file=$BASH_SCRIPTS/aliases-local.sh
-  if [ -f "$local_aliases_file" ]; then
-    echo
-    echo "Local aliases:"
-    echo "--------------"
-    cat $local_aliases_file
-  fi
 }
 
 function man-pack-list {
