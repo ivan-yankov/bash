@@ -139,3 +139,7 @@ function umount-drive {
   sudo umount /media/$USER/$1
   sudo rmdir /media/$USER/$1
 }
+
+function files-count {
+  ls | wc -l
+}
