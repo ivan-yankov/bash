@@ -11,7 +11,7 @@ function java-install {
   archive_file=$image_type-$version.tar.gz
 
   untargz $archive_file
-  d=$(lstargz $archive_file | head -1 | cut -f1 -d "/")
+  d=$(targz-root $archive_file)
 
   sudo mkdir -p /opt/java
   dest=/opt/java/$image_type-$version
