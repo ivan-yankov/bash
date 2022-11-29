@@ -1,14 +1,19 @@
-function find-file
-{
+function find-file {
   find . -name "$@"
 }
 
-function find-dir
-{
+function find-dir {
   find . -type d -name "$@"
 }
 
-function find-text
-{
+function find-text {
   grep -rIinH "$@"
+}
+
+function find-text-cs {
+  grep -rInH "$@"
+}
+
+function replace-text {
+  grep -rl "$1" | xargs sed -i "s/$1/$2/g"
 }
