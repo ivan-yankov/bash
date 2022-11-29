@@ -7,6 +7,10 @@ function find-dir {
 }
 
 function find-text {
+  grep -rl "$@"
+}
+
+function find-text-verbose {
   grep -rIinH "$@"
 }
 
