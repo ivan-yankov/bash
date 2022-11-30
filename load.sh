@@ -1,7 +1,6 @@
-export BASH_SCRIPTS=~/data/repos/bash
-export PATH=$PATH:$BASH_SCRIPTS
+export REPOS=~/data/repos
 
-for file in $BASH_SCRIPTS/*
+for file in $REPOS/bash/*
 do
   if [ -f $file ]; then
     if [ ${file} == $BASH_SOURCE ]; then
