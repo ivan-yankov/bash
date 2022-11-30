@@ -9,11 +9,13 @@ function fix-xorg-hotkeys {
   sudo apt update
   sudo apt dist-upgrade
 
-  cat <<EOF | sudo tee /etc/apt/preferences.d/pin-xorg-hotkeys
-  Package: *
-  Pin: release o=LP-PPA-nrbrtx-xorg-hotkeys
-  Pin-Priority: 1337
-  EOF
+  # pin version to avoid upgrade
+
+  # cat <<EOF | sudo tee /etc/apt/preferences.d/pin-xorg-hotkeys
+  # Package: *
+  # Pin: release o=LP-PPA-nrbrtx-xorg-hotkeys
+  # Pin-Priority: 1337
+  # EOF
 }
 
 function fix-xorg-hotkeys-remove {
