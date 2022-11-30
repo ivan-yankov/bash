@@ -3,6 +3,7 @@
 # on key-press instead of key-release
 # this prevents hotkeys with more than two keys
 # to work properly
+# https://launchpad.net/~nrbrtx/+archive/ubuntu/xorg-hotkeys
 function fix-xorg-hotkeys {
   sudo apt-add-repository ppa:nrbrtx/xorg-hotkeys
   sudo apt update
