@@ -1,7 +1,7 @@
-if [ -z $1 ]; then
+dir=$1
+
+if [ -n $dir ]; then
   dir=$(dirname $BASH_SOURCE)
-else
-  dir=$1
 fi
 
 for file in $dir/*; do

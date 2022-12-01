@@ -1,5 +1,5 @@
 function cmds {
-  is-defined $BASH_SCRIPTS
+  is-defined $BASH_SCRIPTS || return 1
 
   echo "Commands:"
   echo "---------"
@@ -36,7 +36,7 @@ function cmds {
 }
 
 function als {
-  is-defined $BASH_SCRIPTS
+  is-defined $BASH_SCRIPTS || return 1
 
   aliases_file=$BASH_SCRIPTS/aliases.sh
   if [ -f "$aliases_file" ]; then
