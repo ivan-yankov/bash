@@ -1,18 +1,10 @@
 function zoom-meeting {
+  is-defined $1 || return 1
   pkill zoom
   zoom --url=$1 &
 }
 
 function zoom-login {
-  echo -n Username:
-  read username
-
-  echo -n Password:
-  read -s password
-
-  zoom --username=$username --password=$password &
-}
-
-function zoom-login-user-pass {
+  is-defined $1 && is-defined $2 || return 1
   zoom --username=$1 --password=$2 &
 }

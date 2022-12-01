@@ -6,11 +6,8 @@ function clean-system {
 }
 
 function create-shortcut {
-	if [ "$#" != "3" ]; then
-    echo "create-shortcut <shortcut-name> <execution-file> <icon-file>"
-    return
-  fi
-
+  is-defined $1 && is-defined $2 && is-defined $3 || return 1
+  
   shortcut_name=$1
   execution_file=$2
   icon_file=$3
@@ -30,99 +27,64 @@ function create-shortcut {
 }
 
 function diffdir {
-  if [ "$#" != "2" ]; then
-    echo "diffdir <src> <dest>"
-    return
-  fi
-
+  is-defined $1 && is-defined $2 || return 1
   src=$1
   dest=$2
-
   diff -qr $src $dest
 }
 
 function own {
-  if [ "$#" != "1" ]; then
-    echo "own <file>"
-    return
-  fi
-
+  is-defined $1 || return 1
   file=$1
-
   sudo chown --recursive $USER $file
 }
 
 function size {
-  if [ "$#" != "1" ]; then
-    echo "size <file>"
-    return
-  fi
-
+  is-defined $1 || return 1
   file=$1
-
   sudo du -sh $file
 }
 
 function syncdir {
-  if [ "$#" != "2" ]; then
-    echo "syncdir <src> <dest>"
-    return
-  fi
-
+  is-defined $1 && is-defined $2 || return 1
   src=$1
   dest=$2
-
   sudo rsync --delete --inplace --checksum -a $src/ $dest
 }
 
 function syncdir-quick {
-  if [ "$#" != "2" ]; then
-    echo "syncdir <src> <dest>"
-    return
-  fi
-
+  is-defined $1 && is-defined $2 || return 1
   src=$1
   dest=$2
-
   sudo rsync --delete --inplace -a $src/ $dest
 }
 
 function base64-encode {
+  is-defined $1 || return 1
   echo -n $1 | base64
 }
 
 function base64-decode {
+  is-defined $1 || return 1
   echo $1 | base64 --decode
   echo
 }
 
 function dvd-copy {
-  if [ "$#" != "1" ]; then
-    echo "dvd-copy <dest>"
-    return
-  fi
-  
+  is-defined $1 || return 1  
   dest=~/temp/$1
-  
   mkdir -p $dest
   sudo cp -r ./VIDEO_TS $dest
   sudo chmod +rwx $dest/VIDEO_TS/
 }
 
 function external-drive-permissions {
-  if [ "$#" != "1" ]; then
-    echo "external-drive-permissions <path>"
-    return
-  fi
+  is-defined $1 || return 1
   sudo chmod -R ugo+rwx $1
 }
 
 function mount-drive {
-  if [ "$#" != "1" ]; then
-    echo "mount-usb <label>"
-    return
-  fi
-
+  is-defined $1 || return 1
   local label=$1
   local device=$(sudo blkid | grep $label)
   local m=${device%:*}
@@ -131,15 +93,23 @@ function mount-drive {
 }
 
 function umount-drive {
-  if [ "$#" != "1" ]; then
-    echo "umount-usb <label>"
-    return
-  fi
-
+  is-defined $1 || return 1
   sudo umount /media/$USER/$1
   sudo rmdir /media/$USER/$1
 }
 
 function files-count {
   ls | wc -l
+}
+
+function fm {
+  mc ~/data ~/temp
+}
+
+function fmh {
+  mc . .
+}
+
+function fmm {
+  mc ~/data /media
 }

@@ -10,12 +10,11 @@ function fix-xorg-hotkeys {
   sudo apt dist-upgrade
 
   # pin version to avoid upgrade
-
-  # cat <<EOF | sudo tee /etc/apt/preferences.d/pin-xorg-hotkeys
-  # Package: *
-  # Pin: release o=LP-PPA-nrbrtx-xorg-hotkeys
-  # Pin-Priority: 1337
-  # EOF
+  f=/etc/apt/preferences.d/pin-xorg-hotkeys
+  sudo touch $f
+  sudo echo "Package: *" >> $f
+  sudo echo "Pin: release o=LP-PPA-nrbrtx-xorg-hotkeys" >> $f
+  sudo echo "Pin-Priority: 1337" >> $f
 }
 
 function fix-xorg-hotkeys-remove {
@@ -46,7 +45,8 @@ function install-openjfx {
 }
 
 function install-micro-text-editor {
-  local dir=$1
+  is-defined $1 || return 1
+  dir=$1
   sudo apt install xclip
   sudo mkdir -p $dir
   sudo curl -sL https://gist.githubusercontent.com/zyedidia/d4acfcc6acf2d0d75e79004fa5feaf24/raw/a43e603e62205e1074775d756ef98c3fc77f6f8d/install_micro.sh | sudo bash -s linux64 $dir
@@ -55,6 +55,7 @@ function install-micro-text-editor {
 }
 
 function uninstall-micro-text-editor {
+  is-defined $1 || return 1
   local dir=$1
   sudo update-alternatives --remove editor $dir/micro
   sudo rm /opt/bin/micro

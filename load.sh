@@ -1,7 +1,10 @@
-export REPOS=~/data/repos
+if [ -z $1 ]; then
+  dir=$(dirname $BASH_SOURCE)
+else
+  dir=$1
+fi
 
-for file in $REPOS/bash/*
-do
+for file in $dir/*; do
   if [ -f $file ]; then
     if [ ${file} == $BASH_SOURCE ]; then
       # avoid infinite recursion

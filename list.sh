@@ -1,4 +1,6 @@
 function cmds {
+  is-defined $BASH_SCRIPTS
+
   echo "Commands:"
   echo "---------"
   result=()
@@ -33,7 +35,9 @@ function cmds {
   done
 }
 
-function aliases {
+function als {
+  is-defined $BASH_SCRIPTS
+
   aliases_file=$BASH_SCRIPTS/aliases.sh
   if [ -f "$aliases_file" ]; then
     echo
