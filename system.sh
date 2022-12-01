@@ -101,15 +101,3 @@ function umount-drive {
 function files-count {
   ls | wc -l
 }
-
-function fm {
-  mc ~/data ~/temp
-}
-
-function fmh {
-  mc . .
-}
-
-function fmm {
-  mc ~/data /media
-}
