@@ -1,10 +1,8 @@
 function cmds {
-  is-defined $BASH_SCRIPTS || return 1
-
   echo "Commands:"
   echo "---------"
   result=()
-  for dir in $BASH_SCRIPTS/*
+  for dir in $(dirname $BASH_SOURCE)/*
   do
     for file in $dir*
     do
@@ -36,9 +34,7 @@ function cmds {
 }
 
 function als {
-  is-defined $BASH_SCRIPTS || return 1
-
-  aliases_file=$BASH_SCRIPTS/aliases.sh
+  aliases_file=$(dirname $BASH_SOURCE)/aliases.sh
   if [ -f "$aliases_file" ]; then
     echo
     echo "Aliases:"
