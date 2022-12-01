@@ -11,7 +11,7 @@ function ytd-get {
 
 function ytd-remove {
   is-defined $YOUTUBE_DOWNLOADER || return 1
-  sudo rm $YOUTUBE_DOWNLOADER
+  sudo rm -rf $(dirname $YOUTUBE_DOWNLOADER)
 }
 
 function ytd-help {

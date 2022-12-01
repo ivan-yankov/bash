@@ -45,20 +45,21 @@ function install-openjfx {
 }
 
 function install-micro-text-editor {
-  is-defined $1 || return 1
-  local dir=$1
+  is-defined $TEXT_EDITOR || return 1
+
+  local dir=$(dirname $TEXT_EDITOR)
   sudo apt install xclip
   sudo mkdir -p $dir
   sudo curl -sL https://gist.githubusercontent.com/zyedidia/d4acfcc6acf2d0d75e79004fa5feaf24/raw/a43e603e62205e1074775d756ef98c3fc77f6f8d/install_micro.sh | sudo bash -s linux64 $dir
-  sudo update-alternatives --install /usr/bin/editor editor $dir/micro 1
+  sudo update-alternatives --install /usr/bin/editor editor $TEXT_EDITOR 1
   sudo select-editor
 }
 
 function uninstall-micro-text-editor {
-  is-defined $1 || return 1
-  local dir=$1
-  sudo update-alternatives --remove editor $dir/micro
-  sudo rm /opt/bin/micro
+  is-defined $TEXT_EDITOR || return 1
+
+  sudo update-alternatives --remove editor $TEXT_EDITOR
+  sudo rm -rf $(dirname $TEXT_EDITOR)
   sudo select-editor
 }
 
