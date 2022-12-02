@@ -45,8 +45,6 @@ function install-openjfx {
 }
 
 function install-micro-text-editor {
-  is-defined $TEXT_EDITOR || return 1
-
   local dir=$(dirname $TEXT_EDITOR)
   sudo apt install xclip
   sudo mkdir -p $dir
@@ -56,8 +54,6 @@ function install-micro-text-editor {
 }
 
 function uninstall-micro-text-editor {
-  is-defined $TEXT_EDITOR || return 1
-
   sudo update-alternatives --remove editor $TEXT_EDITOR
   sudo rm -rf $(dirname $TEXT_EDITOR)
   sudo select-editor

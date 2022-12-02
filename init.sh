@@ -26,13 +26,16 @@ function load {
 }
 
 function init {
-  is-defined $1 && is-defined $2 && is-defined $3 && is-defined $4 && is-defined $5 || return 1
+  export BASH_LOCAL=~/.bash
+  load $BASH_LOCAL
   
-  export DATA=$1
-  export TEMP=$2
-  export REPOS=$3
-  export TEXT_EDITOR=$4
-  export YOUTUBE_DOWNLOADER=$5
-  
+  is-defined $DATA || return 1
+  is-defined $TEMP || return 1
+  is-defined $REPOS || return 1
+  is-defined $TEXT_EDITOR || return 1
+  is-defined $JAVA || return 1
+  is-defined $APP_IMAGE || return 1
+  is-defined $YOUTUBE_DOWNLOADER || return 1
+
   load $REPOS/bash
 }

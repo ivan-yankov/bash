@@ -29,7 +29,7 @@ function java-install {
   java-download $image_type $version $(dirname $archive)
   java-extract $archive
 
-  local dest=/opt/java/$image_type-$version
+  local dest=$JAVA/$image_type-$version
   sudo mkdir -p $(dirname $dest)
   sudo rm -rf $dest
   sudo mv $(dirname $archive)/$image_type-$version $dest
