@@ -41,5 +41,5 @@ function java-set {
   local version=$2 # 1, 2, 3, ...
 
   sudo rm /usr/bin/java
-  sudo ln -s /opt/java/$image_type-$version/bin/java /usr/bin/java
+  sudo ln -s $JAVA/$image_type-$version/bin/java /usr/bin/java
 }
