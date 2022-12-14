@@ -39,6 +39,11 @@ function own {
   sudo chown --recursive $USER $file
 }
 
+function grant-dir-access {
+  is-defined $1 || return 1
+  sudo chmod u+rx,go-w $1
+}
+
 function size {
   is-defined $1 || return 1
   file=$1
