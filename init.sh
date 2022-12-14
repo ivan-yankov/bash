@@ -31,11 +31,10 @@ function init {
   
   is-defined $DATA || return 1
   is-defined $TEMP || return 1
-  is-defined $REPOS || return 1
   is-defined $TEXT_EDITOR || return 1
   is-defined $JAVA || return 1
   is-defined $APP_IMAGE || return 1
   is-defined $YOUTUBE_DOWNLOADER || return 1
 
-  load $REPOS/bash
+  load $(dirname $BASH_SOURCE)
 }

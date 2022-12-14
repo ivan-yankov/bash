@@ -1,16 +1,16 @@
 function find-text {
   is-defined $1 || return 1
-  grep -rl $1
+  grep -rlI $1
 }
 
 function find-text-verbose {
   is-defined $1 || return 1
-  grep -rIinH $1
+  grep -rInH $1
 }
 
-function find-text-case-sensitive {
+function find-text-ignore-case {
   is-defined $1 || return 1
-  grep -rInH $1
+  grep -rIinH $1
 }
 
 function replace-text {
@@ -23,7 +23,7 @@ function replace-text {
 
 function replace-text-all {
   is-defined $1 && is-defined $2 || return 1
-  grep -rl "$1" | xargs sed -i "s/$1/$2/g"
+  grep -rlI "$1" | xargs sed -i "s/$1/$2/g"
 }
 
 function get-ini-value {

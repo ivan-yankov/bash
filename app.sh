@@ -2,7 +2,7 @@ function release-app-image {
   local project_dir=$PWD
   local cache_dir=~/.app-image-builder/cache
 
-  source $REPOS/app-image-builder/build-jvm-based-app-image.sh
+  source $(dirname $(dirname $BASH_SOURCE))/app-image-builder/build-jvm-based-app-image.sh
 
   sudo mkdir -p $APP_IMAGE
 
