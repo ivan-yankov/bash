@@ -22,5 +22,14 @@ function ytd-formats {
 
 function ytd-download {
   # provide format and url
-  python $YOUTUBE_DOWNLOADER -f "$@"
+  is-defined $1 || return 1
+  local fmt=$(ytd-formats $1 | grep best | cut -d ' ' -f1)
+  python $YOUTUBE_DOWNLOADER -f $fmt $1
+}
+
+function extract-audio {
+  is-defined $1 || return 1
+  local input="$1"
+  local output=$(file-name-without-ext "$input").mp3
+  ffmpeg -i "$input" "$output"
 }

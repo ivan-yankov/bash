@@ -5,27 +5,6 @@ function clean-system {
   sudo apt purge $(dpkg -l | grep '^rc' | awk '{print $2}')
 }
 
-function create-shortcut {
-  is-defined $1 && is-defined $2 && is-defined $3 || return 1
-  
-  shortcut_name=$1
-  execution_file=$2
-  icon_file=$3
-
-  file=~/Desktop/$shortcut_name.desktop
-
-  echo "[Desktop Entry]" >> $file
-  echo "Name="$shortcut_name >> $file
-  echo "Comment=" >> $file
-  echo "Exec="$execution_file >> $file
-  echo "Icon="$icon_file >> $file
-  echo "Terminal=false" >> $file
-  echo "Type=Application" >> $file
-
-  chmod +x $file
-  chown $USER $file
-}
-
 function diffdir {
   is-defined $1 && is-defined $2 || return 1
   src=$1
@@ -101,8 +80,4 @@ function umount-drive {
   is-defined $1 || return 1
   sudo umount /media/$USER/$1
   sudo rmdir /media/$USER/$1
-}
-
-function files-count {
-  ls | wc -l
 }
