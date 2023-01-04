@@ -64,7 +64,7 @@ function uninstall-micro {
 function install-mc {
   sudo apt install mc
   mkdir -p ~/.config/mc
-  cp $BASH_SOURCE/resources/mc/* ~/.config/mc
+  cp $(dirname $BASH_SOURCE)/resources/mc/* ~/.config/mc
 }
 
 function install-virtualbox {
