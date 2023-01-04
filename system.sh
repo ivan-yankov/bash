@@ -5,17 +5,9 @@ function clean-system {
   sudo apt purge $(dpkg -l | grep '^rc' | awk '{print $2}')
 }
 
-function diffdir {
-  is-defined $1 && is-defined $2 || return 1
-  src=$1
-  dest=$2
-  diff -qr $src $dest
-}
-
 function own {
   is-defined $1 || return 1
-  file=$1
-  sudo chown --recursive $USER $file
+  sudo chown --recursive $USER $1
 }
 
 function grant-dir-access {
@@ -25,22 +17,26 @@ function grant-dir-access {
 
 function size {
   is-defined $1 || return 1
-  file=$1
-  sudo du -sh $file
+  sudo du -sh $1
 }
 
-function syncdir {
+function backup {
   is-defined $1 && is-defined $2 || return 1
-  src=$1
-  dest=$2
-  sudo rsync --delete --inplace --checksum -a $src/ $dest
+  local src=$1
+  local dest=$2
+  sudo rsync --delete --archive --checksum $src/ $dest
 }
 
-function syncdir-quick {
+function diffdir {
   is-defined $1 && is-defined $2 || return 1
-  src=$1
-  dest=$2
-  sudo rsync --delete --inplace -a $src/ $dest
+  diff -qr $1 $2
+}
+
+function backup-quick {
+  is-defined $1 && is-defined $2 || return 1
+  local src=$1
+  local dest=$2
+  sudo rsync --delete --archive $src/ $dest
 }
 
 function base64-encode {
