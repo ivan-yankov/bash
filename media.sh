@@ -3,28 +3,36 @@ function flac-test {
   find $1 -type f -iname '*.flac' -print0 | xargs --null flac -wst
 }
 
+function downloader {
+  is-defined $PROGRAMS || return 1
+  echo $PROGRAMS/youtube/youtube-dl
+}
+
 function ytd-get {
-  sudo mkdir -p $(dirname $YOUTUBE_DOWNLOADER)
-  sudo curl -X GET -L https://yt-dl.org/downloads/latest/youtube-dl --output $YOUTUBE_DOWNLOADER
+  is-defined $PROGRAMS || return 1
+  sudo mkdir -p $(dirname $(downloader))
+  sudo curl -X GET -L https://yt-dl.org/downloads/latest/youtube-dl --output $downloader
 }
 
 function ytd-remove {
-  sudo rm -rf $(dirname $YOUTUBE_DOWNLOADER)
+  is-defined $PROGRAMS || return 1
+  sudo rm -rf $(dirname $(downloader))
 }
 
 function ytd-help {
-  python $YOUTUBE_DOWNLOADER --help
+  is-defined $PROGRAMS || return 1
+  python $(downloader) --help
 }
 
 function ytd-formats {
-  python $YOUTUBE_DOWNLOADER -F $1
+  is-defined $PROGRAMS || return 1
+  python $(downloader) -F $1
 }
 
 function ytd-download {
-  # provide format and url
-  is-defined $1 || return 1
+  is-defined $PROGRAMS &&  is-defined $1 || return 1
   local fmt=$(ytd-formats $1 | grep best | cut -d ' ' -f1)
-  python $YOUTUBE_DOWNLOADER -f $fmt $1
+  python $(downloader) -f $fmt $1
 }
 
 function extract-audio {

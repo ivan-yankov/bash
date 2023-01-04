@@ -19,8 +19,9 @@ function java-extract {
 }
 
 function java-install {
-  is-defined $1 && is-defined $2 || return 1
+  is-defined $PROGRAMS && is-defined $1 && is-defined $2 || return 1
 
+  local java=$PROGRAMS/java
   local image_type=$1 # jdk, jre
   local version=$2 # 1, 2, 3, ...
 
@@ -29,7 +30,7 @@ function java-install {
   java-download $image_type $version $(dirname $archive)
   java-extract $archive
 
-  local dest=$JAVA/$image_type-$version
+  local dest=$java/$image_type-$version
   sudo mkdir -p $(dirname $dest)
   sudo rm -rf $dest
   sudo mv $(dirname $archive)/$image_type-$version $dest
@@ -41,5 +42,5 @@ function java-set {
   local version=$2 # 1, 2, 3, ...
 
   sudo rm /usr/bin/java
-  sudo ln -s $JAVA/$image_type-$version/bin/java /usr/bin/java
+  sudo ln -s $PROGRAMS/java/$image_type-$version/bin/java /usr/bin/java
 }

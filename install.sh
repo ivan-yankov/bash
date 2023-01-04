@@ -17,7 +17,7 @@ function fix-xorg-hotkeys {
   sudo echo "Pin-Priority: 1337" >> $f
 }
 
-function fix-xorg-hotkeys-remove {
+function fix-xorg-hotkeys-remove-ppa {
 	sudo apt install ppa-purge
 	sudo rm /etc/apt/preferences.d/pin-xorg-hotkeys
 	sudo ppa-purge ppa:nrbrtx/xorg-hotkeys
@@ -44,19 +44,27 @@ function install-openjfx {
   sudo apt-mark hold openjfx libopenjfx-java libopenjfx-jni
 }
 
-function install-micro-text-editor {
-  local dir=$MICRO
+function install-micro {
+  is-defined $PROGRAMS || return 1
+  local dir=$PROGRAMS/micro
   sudo apt install xclip
   sudo mkdir -p $dir
   sudo curl -sL https://gist.githubusercontent.com/zyedidia/d4acfcc6acf2d0d75e79004fa5feaf24/raw/a43e603e62205e1074775d756ef98c3fc77f6f8d/install_micro.sh | sudo bash -s linux64 $dir
   sudo rm /usr/bin/editor
-  sudo ln -s $MICRO/micro /usr/bin/editor
+  sudo ln -s $dir/micro /usr/bin/editor
 }
 
-function uninstall-micro-text-editor {
+function uninstall-micro {
+  is-defined $PROGRAMS || return 1
   sudo rm /usr/bin/editor
   sudo ln -s /bin/nano /usr/bin/editor
-  sudo rm -rf $MICRO
+  sudo rm -rf $PROGRAMS/micro
+}
+
+function install-mc {
+  sudo apt install mc
+  mkdir -p ~/.config/mc
+  cp $BASH_SOURCE/resources/mc/* ~/.config/mc
 }
 
 function install-virtualbox {

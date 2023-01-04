@@ -28,11 +28,5 @@ function load {
 function init {
   export BASH_LOCAL=~/.bash
   load $BASH_LOCAL
-
-  is-defined $MICRO || return 1  
-  is-defined $JAVA || return 1
-  is-defined $APP_IMAGE || return 1
-  is-defined $YOUTUBE_DOWNLOADER || return 1
-
   load $(dirname $BASH_SOURCE)
 }
