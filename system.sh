@@ -29,28 +29,32 @@ function backup-update-quick {
   is-defined $1 && is-defined $2 || return 1
   local src=$1
   local dest=$2
-  sudo rsync --archive $src/ $dest
+  local exclude=$3
+  sudo rsync $exclude --archive $src/ $dest
 }
 
 function backup-update {
   is-defined $1 && is-defined $2 || return 1
   local src=$1
   local dest=$2
-  sudo rsync --archive --checksum $src/ $dest
+  local exclude=$3
+  sudo rsync $exclude --archive --checksum $src/ $dest
 }
 
 function backup-sync-quick {
   is-defined $1 && is-defined $2 || return 1
   local src=$1
   local dest=$2
-  sudo rsync --delete --archive $src/ $dest
+  local exclude=$3
+  sudo rsync $exclude --delete --archive $src/ $dest
 }
 
 function backup-sync {
   is-defined $1 && is-defined $2 || return 1
   local src=$1
   local dest=$2
-  sudo rsync --delete --archive --checksum $src/ $dest
+  local exclude=$3
+  sudo rsync $exclude --delete --archive --checksum $src/ $dest
 }
 
 function base64-encode {
