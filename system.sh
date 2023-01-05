@@ -20,23 +20,37 @@ function size {
   sudo du -sh $1
 }
 
-function backup {
-  is-defined $1 && is-defined $2 || return 1
-  local src=$1
-  local dest=$2
-  sudo rsync --delete --archive --checksum $src/ $dest
-}
-
 function diffdir {
   is-defined $1 && is-defined $2 || return 1
   diff -qr $1 $2
 }
 
-function backup-quick {
+function backup-update-quick {
+  is-defined $1 && is-defined $2 || return 1
+  local src=$1
+  local dest=$2
+  sudo rsync --archive $src/ $dest
+}
+
+function backup-update {
+  is-defined $1 && is-defined $2 || return 1
+  local src=$1
+  local dest=$2
+  sudo rsync --archive --checksum $src/ $dest
+}
+
+function backup-sync-quick {
   is-defined $1 && is-defined $2 || return 1
   local src=$1
   local dest=$2
   sudo rsync --delete --archive $src/ $dest
+}
+
+function backup-sync {
+  is-defined $1 && is-defined $2 || return 1
+  local src=$1
+  local dest=$2
+  sudo rsync --delete --archive --checksum $src/ $dest
 }
 
 function base64-encode {
