@@ -26,35 +26,19 @@ function diffdir {
 }
 
 function backup-update-quick {
-  is-defined $1 && is-defined $2 || return 1
-  local src=$1
-  local dest=$2
-  local exclude=$3
-  sudo rsync $exclude --archive $src/ $dest
+  sudo rsync --archive "$@"
 }
 
 function backup-update {
-  is-defined $1 && is-defined $2 || return 1
-  local src=$1
-  local dest=$2
-  local exclude=$3
-  sudo rsync $exclude --archive --checksum $src/ $dest
+  sudo rsync --archive --checksum "$@"
 }
 
 function backup-sync-quick {
-  is-defined $1 && is-defined $2 || return 1
-  local src=$1
-  local dest=$2
-  local exclude=$3
-  sudo rsync $exclude --delete --archive $src/ $dest
+  sudo rsync --delete --archive "$@"
 }
 
 function backup-sync {
-  is-defined $1 && is-defined $2 || return 1
-  local src=$1
-  local dest=$2
-  local exclude=$3
-  sudo rsync $exclude --delete --archive --checksum $src/ $dest
+  sudo rsync --delete --archive --checksum "$@"
 }
 
 function base64-encode {
