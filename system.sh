@@ -79,3 +79,11 @@ function umount-drive {
   sudo umount /media/$USER/$1
   sudo rmdir /media/$USER/$1
 }
+
+function terminal-window {
+  xdotool key ctrl+alt+t
+}
+
+function terminal-tab {
+  xdotool key ctrl+shift+t
+}
