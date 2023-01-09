@@ -1,4 +1,4 @@
-function mnt-drive {
+function mnt {
   is-defined $1 || return 1
   local label=$1
   local device=$(sudo blkid | grep $label)
@@ -7,7 +7,7 @@ function mnt-drive {
   sudo mount $m /media/$USER/$label
 }
 
-function umnt-drive {
+function umnt {
   is-defined $1 || return 1
   sudo umount /media/$USER/$1
   sudo rmdir /media/$USER/$1
