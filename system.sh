@@ -26,19 +26,19 @@ function diffdir {
 }
 
 function backup-update-quick {
-  sudo rsync --archive "$@"
+  sudo rsync --archive --copy-links "$@"
 }
 
 function backup-update {
-  sudo rsync --archive --checksum "$@"
+  sudo rsync --archive --checksum --copy-links "$@"
 }
 
 function backup-sync-quick {
-  sudo rsync --delete --archive "$@"
+  sudo rsync --delete --archive --copy-links "$@"
 }
 
 function backup-sync {
-  sudo rsync --delete --archive --checksum "$@"
+  sudo rsync --delete --archive --checksum --copy-links "$@"
 }
 
 function base64-encode {
