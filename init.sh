@@ -26,7 +26,6 @@ function load {
 }
 
 function init {
-  export BASH_LOCAL=~/.bash
-  load $BASH_LOCAL
+  load ~/.bash
   load $(dirname $BASH_SOURCE)
 }

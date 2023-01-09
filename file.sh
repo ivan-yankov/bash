@@ -1,8 +1,8 @@
-function create-shortcut {
+function file-shortcut {
   is-defined $1 && is-defined $2 && is-defined $3 || return 1
   
   shortcut_name="$1"
-  execution_file="$2"
+  target_file="$2"
   icon_file="$3"
 
   file=~/Desktop/$shortcut_name.desktop
@@ -10,7 +10,7 @@ function create-shortcut {
   echo "[Desktop Entry]" >> $file
   echo "Name="$shortcut_name >> $file
   echo "Comment=" >> $file
-  echo "Exec="$execution_file >> $file
+  echo "Exec="$target_file >> $file
   echo "Icon="$icon_file >> $file
   echo "Terminal=false" >> $file
   echo "Type=Application" >> $file

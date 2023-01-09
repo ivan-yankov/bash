@@ -51,8 +51,6 @@ function docker-clear {
 
   # Remove all volumes
   docker volume rm $(docker volume ls -q)
-
-  docker-list
 }
 
 function docker-remove-none-images {

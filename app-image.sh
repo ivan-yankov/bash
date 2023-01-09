@@ -1,4 +1,4 @@
-function release-app-image {
+function app-image-release {
   is-defined $PROGRAMS
 
   local project_dir=$PWD
@@ -12,7 +12,7 @@ function release-app-image {
   $project_dir/build.sh && \
 
   for ini_file in $project_dir/*.ini; do
-    local application_name=$(get-ini-value ApplicationName $ini_file)
+    local application_name=$(text-get-ini-value ApplicationName $ini_file)
     local app_image=$app_image_dir/$application_name.AppImage
 
     build-jvm-based-app-image $ini_file $builder_dir/resources $cache_dir $app_image && \

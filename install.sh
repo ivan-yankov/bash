@@ -4,7 +4,7 @@
 # this prevents hotkeys with more than two keys
 # to work properly
 # https://launchpad.net/~nrbrtx/+archive/ubuntu/xorg-hotkeys
-function fix-xorg-hotkeys {
+function install-xorg-hotkeys-fix {
   sudo apt-add-repository ppa:nrbrtx/xorg-hotkeys
   sudo apt update
   sudo apt dist-upgrade
@@ -17,7 +17,7 @@ function fix-xorg-hotkeys {
   sudo echo "Pin-Priority: 1337" >> $f
 }
 
-function fix-xorg-hotkeys-remove-ppa {
+function remove-xorg-hotkeys-fix {
 	sudo apt install ppa-purge
 	sudo rm /etc/apt/preferences.d/pin-xorg-hotkeys
 	sudo ppa-purge ppa:nrbrtx/xorg-hotkeys
@@ -59,7 +59,7 @@ function install-micro {
   sudo ln -s $dir/micro /usr/bin/view
 }
 
-function uninstall-micro {
+function remove-micro {
   is-defined $PROGRAMS || return 1
 
   sudo rm /usr/bin/editor
