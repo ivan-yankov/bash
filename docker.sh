@@ -42,18 +42,62 @@ function docker-list {
   docker volume ls
 }
 
-function docker-clear {
-  # Remove all containers
+function docker-remove-containers {
   docker rm $(docker ps -a -q)
+}
 
-  # Remove all images
+function docker-remove-images {
   docker rmi -f $(docker images -q)
-
-  # Remove all volumes
-  docker volume rm $(docker volume ls -q)
 }
 
 function docker-remove-none-images {
   docker image prune
-  docker-list
+}
+
+function docker-remove-volumes {
+  docker volume rm $(docker volume ls -q)
+}
+
+function docker-clear {
+  docker-remove-containers
+  docker-remove-images
+  docker-remove-volumes
+}
+
+function docker-save-images {
+  is-defined $1 || return 1
+
+  local dir=$1
+
+  IFS=$'\n' imgs=($(docker images))
+
+  mkdir -p $dir
+
+  for img in "${imgs[@]:1}"; do
+    local repo=$(echo $img | awk '{ print $1 }')
+    local tag=$(echo $img | awk '{ print $2 }')
+    local id=$(echo $img | awk '{ print $3 }')
+    echo "Save image: $img"
+    docker save --output $id.tar $id
+    echo $repo > $id.repository
+    echo $tag > $id.tag
+  done
+}
+
+function docker-load-images {
+  is-defined $1 || return 1
+
+  local dir=$1
+
+  for f in $dir/*.tar; do
+    local id=$(file-name-without-ext $f)
+    local repo=$(cat $id.repository)
+    local tag=$(cat $id.tag)
+
+    echo "Load image: $id"
+    docker load --input $f
+
+    echo "Tag image: $id -> $repo:$tag"
+    docker tag $id $repo:$tag
+  done
 }
