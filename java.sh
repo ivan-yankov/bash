@@ -43,4 +43,7 @@ function java-set {
 
   sudo rm /usr/bin/java
   sudo ln -s $PROGRAMS/java/$image_type-$version/bin/java /usr/bin/java
+
+  sudo rm /usr/bin/keytool
+  sudo ln -s $PROGRAMS/java/$image_type-$version/bin/keytool /usr/bin/keytool
 }
