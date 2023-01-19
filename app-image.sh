@@ -1,7 +1,7 @@
 function app-image-release {
-  is-defined $PROGRAMS
+  is-defined $PROGRAMS && is-defined $1 || return 1
 
-  local project_dir=$PWD
+  local project_dir=$1
   local cache_dir=~/.app-image-builder/cache
   local app_image_dir=$PROGRAMS/app-image
 
@@ -15,7 +15,7 @@ function app-image-release {
     local application_name=$(text-get-ini-value ApplicationName $ini_file)
     local app_image=$app_image_dir/$application_name.AppImage
 
-    build-jvm-based-app-image $ini_file $builder_dir/resources $cache_dir $app_image && \
+    build-jvm-based-app-image $ini_file $cache_dir $app_image && \
     app-image-alias $application_name
   done
 }
