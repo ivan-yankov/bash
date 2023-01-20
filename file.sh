@@ -39,3 +39,8 @@ function file-ext {
   local fn=$(file-name "$1")
   echo "${fn##*.}"
 }
+
+function mdv {
+  is-defined $1 || return 1
+  pandoc $1 | lynx -stdin
+}
