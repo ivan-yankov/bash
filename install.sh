@@ -71,12 +71,6 @@ function remove-micro {
   sudo rm -rf $PROGRAMS/micro
 }
 
-function install-mc {
-  sudo apt install mc
-  mkdir -p ~/.config/mc
-  cp $(dirname $BASH_SOURCE)/resources/mc/* ~/.config/mc
-}
-
 function install-virtualbox {
   sudo add-apt-repository "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian $(lsb_release -cs) contrib"
   wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
