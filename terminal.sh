@@ -1,7 +1,7 @@
-function terminal-window {
+function twin {
   xdotool key ctrl+alt+t
 }
 
-function terminal-tab {
+function ttab {
   xdotool key ctrl+shift+t
 }
