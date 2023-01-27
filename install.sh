@@ -51,22 +51,13 @@ function install-micro {
   sudo apt install xclip
   sudo mkdir -p $dir
   sudo curl -sL https://gist.githubusercontent.com/zyedidia/d4acfcc6acf2d0d75e79004fa5feaf24/raw/a43e603e62205e1074775d756ef98c3fc77f6f8d/install_micro.sh | sudo bash -s linux64 $dir
-
-  sudo rm /usr/bin/editor
-  sudo ln -s $dir/micro /usr/bin/editor
-
-  sudo rm /usr/bin/view
-  sudo ln -s $dir/micro /usr/bin/view
 }
 
 function remove-micro {
   is-defined $PROGRAMS || return 1
 
-  sudo rm /usr/bin/editor
-  sudo ln -s /bin/nano /usr/bin/editor
-
-  sudo rm /usr/bin/view
-  sudo ln -s /bin/nano /usr/bin/view
+  sudo ln -sf /bin/nano /usr/bin/editor
+  sudo ln -sf /bin/nano /usr/bin/view
 
   sudo rm -rf $PROGRAMS/micro
 }
@@ -92,4 +83,18 @@ function install-systemback {
   sudo add-apt-repository "deb http://ppa.launchpad.net/nemh/systemback/ubuntu xenial main"
   sudo apt update
   sudo apt install systemback
+}
+
+function app-links {
+  is-defined $PROGRAMS || return 1
+
+  sudo ln -sf $PROGRAMS/micro/micro /usr/bin/editor
+  sudo ln -sf $PROGRAMS/micro/micro /usr/bin/view
+  sudo ln -sf /usr/bin/krita /usr/bin/image-editor
+  sudo ln -sf /usr/bin/gwenview /usr/bin/image-viewer
+  sudo ln -sf /usr/bin/vlc /usr/bin/audio-player
+  sudo ln -sf /usr/bin/vlc /usr/bin/video-player
+  sudo ln -sf /usr/bin/libreoffice /usr/bin/office
+  sudo ln -sf /usr/bin/okular /usr/bin/pdf-viewer
+  sudo ln -sf /usr/bin/remarkable /usr/bin/markdown
 }
