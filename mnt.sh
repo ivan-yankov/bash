@@ -1,3 +1,7 @@
+function devices {
+  sudo blkid
+}
+
 function mnt {
   is-defined $1 || return 1
   local label=$1
