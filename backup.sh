@@ -19,5 +19,6 @@ function backup-sync-parallel {
   local src=$1
   local dest=$2
   local number_of_processes=$3
-  ls $src | xargs -n1 -P$number_of_processes -I% /bin/bash -c "source $BASH_SOURCE && backup-sync % $dest"
+  local exclude=$4
+  ls $src | xargs -n1 -P$number_of_processes -I% /bin/bash -c "source $BASH_SOURCE && backup-sync $exclude % $dest"
 }
