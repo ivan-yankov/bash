@@ -78,9 +78,9 @@ function docker-save-images {
     local tag=$(echo $img | awk '{ print $2 }')
     local id=$(echo $img | awk '{ print $3 }')
     echo "Save image: $img"
-    docker save --output $id.tar $id
-    echo $repo > $id.repository
-    echo $tag > $id.tag
+    docker save --output $dir/$id.tar $id
+    echo $repo > $dir/$id.repository
+    echo $tag > $dir/$id.tag
   done
 }
 
