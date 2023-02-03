@@ -91,8 +91,8 @@ function docker-load-images {
 
   for f in $dir/*.tar; do
     local id=$(file-name-without-ext $f)
-    local repo=$(cat $id.repository)
-    local tag=$(cat $id.tag)
+    local repo=$(cat $dir/$id.repository)
+    local tag=$(cat $dir/$id.tag)
 
     echo "Load image: $id"
     docker load --input $f
