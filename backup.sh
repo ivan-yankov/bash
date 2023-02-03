@@ -1,17 +1,17 @@
 function backup-update-quick {
-  sudo rsync --archive --copy-links --progress "$@"
+  sudo rsync --archive --copy-links "$@"
 }
 
 function backup-update {
-  sudo rsync --archive --checksum --copy-links --progress "$@"
+  sudo rsync --archive --checksum --copy-links "$@"
 }
 
 function backup-sync-quick {
-  sudo rsync --delete --archive --copy-links --progress "$@"
+  sudo rsync --delete --archive --copy-links "$@"
 }
 
 function backup-sync {
-  sudo rsync --delete --archive --checksum --copy-links --progress "$@"
+  sudo rsync --delete --archive --checksum --copy-links "$@"
 }
 
 function backup-sync-parallel {
@@ -20,5 +20,5 @@ function backup-sync-parallel {
   local src=$2
   local dest=$3
   local additional=$4
-  ls $src | xargs -n1 -P$number_of_processes -I% sudo rsync --delete --archive --checksum --copy-links --progress $additional % $dest
+  ls $src | xargs -n1 -P$number_of_processes -I% sudo rsync --delete --archive --checksum --copy-links $additional % $dest
 }
