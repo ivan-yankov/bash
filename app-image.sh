@@ -16,7 +16,6 @@ function app-image-release {
     local app_image=$app_image_dir/$application_name.AppImage
 
     build-jvm-based-app-image $ini_file $cache_dir $app_image && \
-    app-image-alias $application_name
   done
 }
 
