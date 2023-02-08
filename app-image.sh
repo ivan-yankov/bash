@@ -18,13 +18,3 @@ function app-image-release {
     build-jvm-based-app-image $ini_file $cache_dir $app_image
   done
 }
-
-function app-image-alias {
-  is-defined $PROGRAMS && is-defined $1 || return 1
-  local app_image_dir=$PROGRAMS/app-image
-  local application_name=$1
-  local out=$BASH_LOCAL/$application_name.sh
-  if [ ! -f $out ]; then
-    echo "alias $application_name=\"$app_image_dir/$application_name.AppImage \"" > $out
-  fi
-}
