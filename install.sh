@@ -18,9 +18,9 @@ function install-xorg-hotkeys-fix {
 }
 
 function remove-xorg-hotkeys-fix {
-	sudo apt install ppa-purge
-	sudo rm /etc/apt/preferences.d/pin-xorg-hotkeys
-	sudo ppa-purge ppa:nrbrtx/xorg-hotkeys
+  sudo apt install ppa-purge
+  sudo rm /etc/apt/preferences.d/pin-xorg-hotkeys
+  sudo ppa-purge ppa:nrbrtx/xorg-hotkeys
 }
 
 function install-audacity {

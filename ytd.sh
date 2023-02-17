@@ -6,7 +6,7 @@ function downloader {
 function ytd-get {
   is-defined $PROGRAMS || return 1
   sudo mkdir -p $(dirname $(downloader))
-  sudo curl -X GET -L https://yt-dl.org/downloads/latest/youtube-dl --output $downloader
+  sudo curl -X GET -L https://yt-dl.org/downloads/latest/youtube-dl --output $(downloader)
 }
 
 function ytd-remove {
