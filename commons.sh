@@ -8,14 +8,9 @@ function own {
   sudo chown --recursive $USER $1
 }
 
-function grant-access-dir {
+function grant-access {
   is-defined $1 || return 1
-  sudo chmod u+rx,go-w $1
-}
-
-function grant-access-external-drive {
-  is-defined $1 || return 1
-  sudo chmod -R ugo+rwx $1
+  sudo chmod -R a+rw $1
 }
 
 function title {
