@@ -9,8 +9,7 @@ function help {
   is-defined $1 || return 1
   local name=$1
 
-  local root=$(dirname $(dirname $BASH_SOURCE))
-  local file=$(find-file $root $name.sh)
+  local file=$(find-file $BASH_LOCAL $name.sh)
 
   if [ -z "$file" ]; then
     echo "Function file [$name.sh] not found"
