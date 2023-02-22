@@ -12,11 +12,6 @@ function load {
       fi
       if [ ${file: -3} == ".sh" ]; then
         source $file
-
-        local fn=$(basename -- $file)
-        local fnc="${fn%.*}"
-
-        CMDS=$CMDS$'\n'$fnc
       fi
     fi
     if [ -d $file ]; then
