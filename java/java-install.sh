@@ -1,4 +1,4 @@
-# dsc:Install java.
+# dsc:Download and install java.
 # env:$PROGRAMS path to the programs directory
 # arg:$1 image type: jdk | jre
 # arg:$2 version: 1, 2, 3, ...
