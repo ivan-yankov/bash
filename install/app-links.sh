@@ -8,7 +8,7 @@
 # dsc:video-player vlc
 # dsc:office       libreoffice
 # dsc:pdf-viewer   okular
-# dsc:markdown     remarkable
+# dsc:markdown     retext
 # env:$PROGRAMS path to the programs directory
 function app-links {
   is-defined $PROGRAMS || return 1
@@ -21,5 +21,5 @@ function app-links {
   sudo ln -sf /usr/bin/vlc /usr/bin/video-player
   sudo ln -sf /usr/bin/libreoffice /usr/bin/office
   sudo ln -sf /usr/bin/okular /usr/bin/pdf-viewer
-  sudo ln -sf /usr/bin/remarkable /usr/bin/markdown
+  sudo ln -sf /usr/bin/retext /usr/bin/markdown
 }
