@@ -4,17 +4,15 @@
 # dsc:  dsc function description
 # dsc:  env global environment variable, used in the function
 # dsc:  arg function argument
+# env:$BASH_LOCAL directory with shells specific to the local system, by default ~/.bash
 # arg:$1 the file to be parsed
 function help {
   is-defined $1 || return 1
   local name=$1
 
-  local file=$(find-file $BASH_LOCAL $name.sh)
-
-  if [ -z "$file" ]; then
-    echo "Function file [$name.sh] not found"
-    return 1
-  fi
+  local file=$(find-file $(dirname $BASH_SOURCE) $name.sh)
+  is-defined $file > /dev/null || file=$(find-file $BASH_LOCAL $name.sh)
+  is-defined $file > /dev/null || { echo "Function file [$name.sh] not found"; return 1; }
 
   IFS=$'\n' src=($(cat $file))
 
