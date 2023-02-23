@@ -1,0 +1,13 @@
+{
+    "Alt-/": "lua:comment.comment",
+    "CtrlUnderscore": "lua:comment.comment",
+    "AltLeft": "PreviousTab",
+    "AltRight": "NextTab",
+    "Ctrl-n": "AddTab",
+    "CtrlShiftHome": "SelectToStart",
+    "CtrlShiftEnd": "SelectToEnd",
+    "Ctrl-f": "FindLiteral",
+    "Ctrl-g": "Find",
+    "Ctrl-o": "FindNext",
+    "Ctrl-p": "FindPrevious"
+}
