@@ -10,7 +10,7 @@ function install-xorg-hotkeys-fix {
   # pin version to avoid upgrade
   f=/etc/apt/preferences.d/pin-xorg-hotkeys
   sudo touch $f
-  sudo echo "Package: *" >> $f
-  sudo echo "Pin: release o=LP-PPA-nrbrtx-xorg-hotkeys" >> $f
-  sudo echo "Pin-Priority: 1337" >> $f
+  echo "Package: *" | sudo tee --append $f
+  echo "Pin: release o=LP-PPA-nrbrtx-xorg-hotkeys" | sudo tee --append $f
+  echo "Pin-Priority: 1337" | sudo tee --append $f
 }
