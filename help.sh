@@ -11,7 +11,7 @@ function help {
   local name=$1
 
   local file=$(find-file $(dirname $BASH_SOURCE) $name.sh)
-  is-defined $file > /dev/null || file=$(find-file $BASH_LOCAL $name.sh)
+  is-defined $file > /dev/null || file=$(find -L $BASH_LOCAL -type f -name $name.sh)
   is-defined $file > /dev/null || { echo "Function file [$name.sh] not found"; return 1; }
 
   IFS=$'\n' src=($(cat $file))
