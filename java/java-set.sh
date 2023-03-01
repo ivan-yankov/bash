@@ -8,9 +8,6 @@ function java-set {
   local image_type=$1
   local version=$2
 
-  sudo rm /usr/bin/java
   sudo ln -sf $PROGRAMS/java/$image_type-$version/bin/java /usr/bin/java
-
-  sudo rm /usr/bin/keytool
   sudo ln -sf $PROGRAMS/java/$image_type-$version/bin/keytool /usr/bin/keytool
 }
