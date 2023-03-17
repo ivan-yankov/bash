@@ -3,7 +3,7 @@
 # dsc:Expects ini file(s) to be defined with build details.
 # arg:$1 project directory
 # arg:$2 AppImage destination directory
-function app-image-release {
+function app-image-build {
   is-defined $1 && is-defined $2 || return 1
 
   local project_dir=$1
