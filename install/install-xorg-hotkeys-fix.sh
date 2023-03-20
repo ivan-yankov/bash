@@ -5,7 +5,7 @@
 function install-xorg-hotkeys-fix {
   sudo apt-add-repository ppa:nrbrtx/xorg-hotkeys
   sudo apt update
-  sudo apt dist-upgrade
+  sudo apt install --only-upgrade xserver-common xserver-xorg-core xserver-xorg-legacy
 
   # pin version to avoid upgrade
   f=/etc/apt/preferences.d/pin-xorg-hotkeys
