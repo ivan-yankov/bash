@@ -3,5 +3,5 @@
 # arg:$1 text to search for
 function find-text-ignore-case {
   is-defined $1 || return 1
-  grep -rIinH $1
+  grep -rIinH "$1"
 }
