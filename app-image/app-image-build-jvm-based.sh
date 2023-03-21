@@ -1,5 +1,5 @@
 # https://www.booleanworld.com/creating-linux-apps-run-anywhere-appimage
-function build-jvm-based-app-image {
+function app-image-build-jvm-based {
   is-defined $1 && is-defined $2 && is-defined $3 || return 1
 
   ini_file=$1
