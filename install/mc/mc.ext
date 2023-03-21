@@ -563,6 +563,9 @@ shell/i/.pps
 shell/i/.rtf
 	Include=office
 
+shell/i/.csv
+    Include=csv
+
 ### Miscellaneous ###
 
 # Compiled Java classes
@@ -737,6 +740,9 @@ include/pdf
 
 include/html
 	View=/usr/bin/firefox %f > /dev/null 2>&1 &
+
+include/csv
+    Open=/usr/bin/office %f > /dev/null 2>&1 &
 
 ### Default ###
 
