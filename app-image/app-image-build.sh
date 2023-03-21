@@ -10,8 +10,6 @@ function app-image-build {
   local app_image_dir=$2
   local cache_dir=~/.app-image-builder/cache
 
-  source $(dirname $BASH_SOURCE)/../../app-image-builder/build-jvm-based-app-image.sh
-
   sudo mkdir -p $app_image_dir
 
   $project_dir/build.sh && \
@@ -20,6 +18,6 @@ function app-image-build {
     local application_name=$(get-ini-value ApplicationName $ini_file)
     local app_image=$app_image_dir/$application_name.AppImage
 
-    build-jvm-based-app-image $ini_file $cache_dir $app_image
+    app-image-build-jvm-based $ini_file $cache_dir $app_image
   done
 }
