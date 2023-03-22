@@ -1,10 +1,13 @@
-# dsc:Mount external USB disk or flash memory.
-# arg:$1 device label
+# dsc:Mount external device.
+# arg:$1 device file or label
+# arg:$2 mount point, if not provided device file or label will be used instead
 function mnt {
   is-defined $1 || return 1
-  local label=$1
-  local device=$(sudo blkid | grep $label)
+  local dev=$1
+  local mp=$dev
+  is-defined $2 && mp=$2
+  local device=$(sudo blkid | grep $dev)
   local m=${device%:*}
-  sudo mkdir -p /mnt/$label
-  sudo mount $m /mnt/$label
+  sudo mkdir -p /mnt/$mp
+  sudo mount $m /mnt/$mp
 }
