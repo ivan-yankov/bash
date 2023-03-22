@@ -5,7 +5,7 @@ function mnt {
   is-defined $1 || return 1
   local dev=$1
   local mp=$dev
-  is-defined $2 && mp=$2
+  is-defined $2 > /dev/null && mp=$2
   local device=$(sudo blkid | grep $dev)
   local m=${device%:*}
   sudo mkdir -p /mnt/$mp
