@@ -1,0 +1,48 @@
+trap 'ERROR DURING INSTALL' ERR
+
+echo | sudo tee --append /etc/sudoers
+echo "$USER ALL=(ALL) NOPASSWD: ALL" | sudo tee --append /etc/sudoers
+
+mkdir -p ~/data
+mkdir -p ~/temp
+
+sudo apt-get update
+
+sudo apt-get install kdiff3 -y
+
+sudo apt-get install git -y
+read user -p "git user: " git_user
+read user -p "git user: " git_email
+git config --global user.name $git_user
+git config --global user.email $git_email
+git config --global merge.tool kdiff3
+
+./bash-setup.sh
+source ~/data/repos/bash/init.sh && init
+
+sudo apt-get install pandoc -y
+sudo apt-get install lynx -y
+sudo apt-get install xdotool -y
+sudo apt-get install neofetch -y
+sudo apt-get install gdebi -y
+sudo apt-get install curl -y
+sudo apt-get install krita -y
+sudo apt-get install retext -y
+sudo apt-get install keepassxc -y
+sudo apt-get install knotes -y
+
+install-micro
+install-mc
+app-links
+
+java-install jdk 17
+java-set jdk 17
+
+read -p "IntelliJ IDEA artifact absolute path (empty to skip): " idea
+extract-to-dir untargz $idea idea /opt
+
+read -p "Maven artifact absolute path (empty to skip): " maven
+extract-to-dir untargz $maven maven /opt
+sudo ln -sf /opt/maven/bin/mvn /usr/bin/mvn
+
+docker-install

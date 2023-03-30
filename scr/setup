@@ -1,0 +1,23 @@
+trap 'ERROR DURING CUSTOM BASH SETUP' ERR
+
+mkdir -p ~/data/repos
+
+cp -r $(dirname $BASH_SOURCE) ~/data/repos
+
+echo | tee --append ~/.bashrc
+
+echo 'export LC_ALL=C.UTF-8' | tee --append ~/.bashrc
+
+echo | tee --append ~/.bashrc
+
+echo 'source ~/data/repos/bash/init.sh && init' | tee --append ~/.bashrc
+
+mkdir -p ~/.bash
+cd ~/.bash
+
+touch alias.sh                                                                                                                                                                                                     
+echo 'alias fm="mc ~/data ~/temp"' | tee --append alias.sh
+echo 'alias fmh="mc . ."' | tee --append alias.sh
+                                                                                                                                                                                                                   
+touch env.sh
+echo 'export PROGRAMS=/opt' | tee --append env.sh

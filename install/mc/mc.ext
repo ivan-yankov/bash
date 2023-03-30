@@ -722,7 +722,7 @@ include/markdown
     View=pandoc %f | lynx -stdin
 
 include/image
-	Open=/usr/bin/image-editor %f > /dev/null 2>&1 &
+	Open=/usr/bin/image-viewer %f > /dev/null 2>&1 &
 	View=/usr/bin/image-viewer %f > /dev/null 2>&1 &
 
 include/audio

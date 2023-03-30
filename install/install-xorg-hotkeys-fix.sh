@@ -4,8 +4,8 @@
 # dsc:https://launchpad.net/~nrbrtx/+archive/ubuntu/xorg-hotkeys
 function install-xorg-hotkeys-fix {
   sudo apt-add-repository ppa:nrbrtx/xorg-hotkeys
-  sudo apt update
-  sudo apt install --only-upgrade xserver-common xserver-xorg-core xserver-xorg-legacy
+  sudo apt-get update
+  sudo apt-get install --only-upgrade xserver-common xserver-xorg-core xserver-xorg-legacy -y
 
   # pin version to avoid upgrade
   f=/etc/apt/preferences.d/pin-xorg-hotkeys
