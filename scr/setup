@@ -1,8 +1,6 @@
-trap 'ERROR DURING CUSTOM BASH SETUP' ERR
-
 mkdir -p ~/data/repos
 
-cp -r $(dirname $BASH_SOURCE) ~/data/repos
+cd ../../ && cp -r bash ~/data/repos
 
 echo | tee --append ~/.bashrc
 
@@ -16,8 +14,8 @@ mkdir -p ~/.bash
 cd ~/.bash
 
 touch alias.sh                                                                                                                                                                                                     
-echo 'alias fm="mc ~/data ~/temp"' | tee --append alias.sh
-echo 'alias fmh="mc . ."' | tee --append alias.sh
+echo 'alias fm="EDITOR=editor mc ~/data ~/temp"' | tee --append alias.sh
+echo 'alias fmh="EDITOR=editor mc . ."' | tee --append alias.sh
                                                                                                                                                                                                                    
 touch env.sh
 echo 'export PROGRAMS=/opt' | tee --append env.sh

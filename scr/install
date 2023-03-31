@@ -1,5 +1,3 @@
-trap 'ERROR DURING INSTALL' ERR
-
 echo | sudo tee --append /etc/sudoers
 echo "$USER ALL=(ALL) NOPASSWD: ALL" | sudo tee --append /etc/sudoers
 
@@ -11,13 +9,13 @@ sudo apt-get update
 sudo apt-get install kdiff3 -y
 
 sudo apt-get install git -y
-read user -p "git user: " git_user
-read user -p "git user: " git_email
+read -p "git user: " git_user
+read -p "git email: " git_email
 git config --global user.name $git_user
 git config --global user.email $git_email
 git config --global merge.tool kdiff3
 
-./bash-setup.sh
+./setup
 source ~/data/repos/bash/init.sh && init
 
 sudo apt-get install pandoc -y
@@ -26,7 +24,7 @@ sudo apt-get install xdotool -y
 sudo apt-get install neofetch -y
 sudo apt-get install gdebi -y
 sudo apt-get install curl -y
-sudo apt-get install krita -y
+sudo apt-get install gimp -y
 sudo apt-get install retext -y
 sudo apt-get install keepassxc -y
 sudo apt-get install knotes -y
@@ -44,5 +42,16 @@ extract-to-dir untargz $idea idea /opt
 read -p "Maven artifact absolute path (empty to skip): " maven
 extract-to-dir untargz $maven maven /opt
 sudo ln -sf /opt/maven/bin/mvn /usr/bin/mvn
+
+read -p "Sbt artifact absolute path (empty to skip): " sbt
+extract-to-dir untargz $sbt sbt /opt
+sudo ln -sf /opt/sbt/bin/sbt /usr/bin/sbt
+
+read -p "Go artifact absolute path (empty to skip): " go
+extract-to-dir untargz $go go /opt
+sudo ln -sf /opt/go/bin/go /usr/bin/go
+mkdir -p ~/data/repos/go
+touch ~/.bash/env.sh
+echo 'export GOPATH=~/data/repos/go' | tee --append ~/.bash/env.sh
 
 docker-install
