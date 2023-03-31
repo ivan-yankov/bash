@@ -1,5 +1,5 @@
 # dsc:Build AppImage.
-# dsc:Expects build.sh script in project directory. It is used to build the project code base.
+# dsc:Expects 'build' script in project directory. It is used to build the project code base.
 # dsc:Expects ini file(s) to be defined with build details.
 # arg:$1 project directory
 # arg:$2 AppImage destination directory
@@ -12,7 +12,7 @@ function app-image-build {
 
   sudo mkdir -p $app_image_dir
 
-  $project_dir/build.sh && \
+  $project_dir/build && \
 
   for ini_file in $project_dir/*.ini; do
     local application_name=$(get-ini-value ApplicationName $ini_file)
