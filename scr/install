@@ -18,8 +18,6 @@ git config --global merge.tool kdiff3
 ./setup
 source ~/data/repos/bash/init.sh && init
 
-cp ~/data/repos/bash/scr/.XCompose ~
-
 sudo apt-get install pandoc -y
 sudo apt-get install lynx -y
 sudo apt-get install xdotool -y
