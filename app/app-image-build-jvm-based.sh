@@ -1,4 +1,10 @@
-# https://www.booleanworld.com/creating-linux-apps-run-anywhere-appimage
+# dsc:Build JVM based AppImage.
+# dsc:https://www.booleanworld.com/creating-linux-apps-run-anywhere-appimage
+# dsc:Expects 'build' script in project directory. It is used to build the project code base.
+# dsc:Expects ini file(s) to be defined with build details.
+# arg:$1 ini file
+# arg:$2 cache directory
+# arg:$3 AppImage destination directory
 function app-image-build-jvm-based {
   is-defined $1 && is-defined $2 && is-defined $3 || return 1
 
