@@ -1,0 +1,3 @@
+grep -l . /sys/bus/usb/devices/*/power/wakeup | while read file; do
+  echo enabled | sudo tee $file
+done

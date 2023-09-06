@@ -566,6 +566,12 @@ shell/i/.rtf
 shell/i/.csv
     Include=csv
 
+shell/i/.djv
+    Include=djv
+
+shell/i/.djvu
+    Include=djv
+
 ### Miscellaneous ###
 
 # Compiled Java classes
@@ -735,8 +741,12 @@ include/office
     Open=/usr/bin/office %f > /dev/null 2>&1 &
 
 include/pdf
-	Open=/usr/bin/pdf-viewer %f > /dev/null 2>&1 &
-	View=/usr/bin/pdf-viewer %f > /dev/null 2>&1 &
+	Open=/usr/bin/okular %f > /dev/null 2>&1 &
+	View=/usr/bin/okular %f > /dev/null 2>&1 &
+
+include/djv
+	Open=/usr/bin/okular %f > /dev/null 2>&1 &
+	View=/usr/bin/okular %f > /dev/null 2>&1 &
 
 include/html
 	View=/usr/bin/firefox %f > /dev/null 2>&1 &
