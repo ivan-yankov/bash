@@ -4,7 +4,6 @@ function app-links {
   echo "Specify target applications (empty to skip)"
 
   read -p "editor: " editor
-  is-defined $editor > /dev/null && sudo ln -sf $editor /usr/bin/editor
   is-defined $editor > /dev/null && sudo ln -sf $editor /usr/bin/te
   is-defined $editor > /dev/null && sudo ln -sf $editor /usr/bin/view
 
