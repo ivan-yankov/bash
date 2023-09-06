@@ -1,8 +1,6 @@
-# dsc:Install and configure micro text editor.
-# env:$PROGRAMS path to the programs directory
+# dsc:Install micro text editor to /opt/micro and configure.
 function install-micro {
-  is-defined $PROGRAMS || return 1
-  local dir=$PROGRAMS/micro
+  local dir=/opt/micro
 
   sudo apt install xclip
   sudo mkdir -p $dir

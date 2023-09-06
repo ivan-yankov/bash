@@ -5,9 +5,8 @@ function app-links {
 
   read -p "editor: " editor
   is-defined $editor > /dev/null && sudo ln -sf $editor /usr/bin/editor
-
-  read -p "view: " view
-  is-defined $view > /dev/null && sudo ln -sf $view /usr/bin/view
+  is-defined $editor > /dev/null && sudo ln -sf $editor /usr/bin/te
+  is-defined $editor > /dev/null && sudo ln -sf $editor /usr/bin/view
 
   read -p "image-editor: " ie
   is-defined $ie > /dev/null && sudo ln -sf $ie /usr/bin/image-editor
