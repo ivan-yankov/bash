@@ -21,9 +21,6 @@ function app-links {
   read -p "office: " office
   is-defined $office > /dev/null && sudo ln -sf $office /usr/bin/office
 
-  read -p "pdf-viewer: " pdfv
-  is-defined $pdfv > /dev/null && sudo ln -sf $pdfv /usr/bin/pdf-viewer
-
   read -p "markdown: " md
   is-defined $md > /dev/null && sudo ln -sf $md /usr/bin/markdown
 }
