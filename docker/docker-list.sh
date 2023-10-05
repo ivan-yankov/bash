@@ -1,13 +1,16 @@
 # dsc:List all docker artifacts.
 function docker-list {
-  echo -e "${COLOR_BOLD}Containers:$COLOR_RESET"
+  printf "${COLOR_CYAN}${COLOR_BOLD}CONTAINERS${COLOR_RESET}"
+  echo
   docker ps -a
   echo
 
-  echo -e "${COLOR_BOLD}Images:$COLOR_RESET"
+  printf "${COLOR_CYAN}${COLOR_BOLD}IMAGES${COLOR_RESET}"
+  echo
   docker images
   echo
 
-  echo -e "${COLOR_BOLD}Volumes:$COLOR_RESET"
+  printf "${COLOR_CYAN}${COLOR_BOLD}VOLUMES${COLOR_RESET}"
+  echo
   docker volume ls
 }
