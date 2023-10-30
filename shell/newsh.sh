@@ -7,9 +7,9 @@ function newsh {
   local file=$fn.sh
   touch $file
   
-  echo '# dsc:' >> $file
-  echo '# env:' >> $file
-  echo '# arg:$1' >> $file
+  echo '# dsc:<Command description>' >> $file
+  echo '# env:<Required environment variables>' >> $file
+  echo '# arg:$1 <Argument>' >> $file
   echo "function $fn {" >> $file
   echo '}' >> $file
 }
