@@ -18,21 +18,21 @@ function help {
 
   if [[ ! $src[0] == '#'* ]]; then
     local msg="Documentation not available"
-    echo -e "$COLOR_RED$msg$COLOR_RESET"
+    printf "${COLOR_RED}${msg}${COLOR_RESET}\n"
     return 1
   fi
 
-  echo -e "$COLOR_MAGENTA$name$COLOR_RESET"
+  printf "${COLOR_MAGENTA}${name}${COLOR_RESET}\n"
 
   for s in "${src[@]}"; do
     if [[ $s == '# dsc'* ]]; then
-      echo -e "$COLOR_LIGHT_YELLOW${s#*:}$COLOR_RESET"
+      printf "${COLOR_LIGHT_YELLOW}${s#*:}${COLOR_RESET}\n"
     fi
     if [[ $s == '# env'* ]]; then
-      echo -e "$COLOR_CYAN${s#*:}$COLOR_RESET"
+      printf "${COLOR_CYAN}${s#*:}${COLOR_RESET}\n"
     fi
     if [[ $s == '# arg'* ]]; then
-      echo -e "$COLOR_YELLOW${s#*:}$COLOR_RESET"
+      printf "${COLOR_YELLOW}${s#*:}${COLOR_RESET}\n"
     fi
   done
 }
