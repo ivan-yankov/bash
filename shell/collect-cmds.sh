@@ -7,8 +7,10 @@ function collect-cmds {
   for file in $dir/*; do
     if [ -f $file ]; then
       if [ ${file: -3} == ".sh" ]; then
-        local fnc=$(file-name-without-ext $file)
-        echo $fnc
+        if grep -q 'function' $file; then
+          local fnc=$(file-name-without-ext $file)
+          echo $fnc
+        fi
       fi
     fi
     if [ -d $file ]; then
