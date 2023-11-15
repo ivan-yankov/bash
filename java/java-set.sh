@@ -10,16 +10,19 @@ function java-set {
   local version=$2
 
   local java_home=[]
+  local link_dir=[]
   if [[ $OSTYPE == "linux-gnu"* ]]; then
     java_home=/opt/java/$image_type-$version/bin
+    link_dir=/usr/bin
   elif [[ $OSTYPE == "darwin"* ]]; then
     # mac os
     java_home=/opt/java/$image_type-$version/Contents/Home/bin
+    link_dir=/usr/local/bin
   else
     echo "Unknown OS type [$OSTYPE]"
     return 1
   fi
 
-  sudo ln -sf $java_home/java /usr/bin/java
+  sudo ln -sf $java_home/java $link_dir/java
   echo "export JAVA_HOME=$java_home" > $BASH_LOCAL/java.sh
 }
