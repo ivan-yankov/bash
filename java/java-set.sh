@@ -12,11 +12,11 @@ function java-set {
   local java_home=[]
   local link_dir=[]
   if [[ $OSTYPE == "linux-gnu"* ]]; then
-    java_home=/opt/java/$image_type-$version/bin
+    java_home=/opt/java/$image_type-$version
     link_dir=/usr/bin
   elif [[ $OSTYPE == "darwin"* ]]; then
     # mac os
-    java_home=/opt/java/$image_type-$version/Contents/Home/bin
+    java_home=/opt/java/$image_type-$version/Contents/Home
     link_dir=/usr/local/bin
   else
     echo "Unknown OS type [$OSTYPE]"
