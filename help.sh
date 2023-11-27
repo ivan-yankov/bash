@@ -10,7 +10,7 @@ function help {
   is-defined $1 || return 1
   local name=$1
 
-  local file=$(find-file $(dirname $BASH_SOURCE) $name.sh)
+  local file=$(find -L $(dirname $BASH_SOURCE) -type f -name $name.sh)
   is-defined $file > /dev/null || file=$(find -L $BASH_LOCAL -type f -name $name.sh)
   is-defined $file > /dev/null || { echo "Function file [$name.sh] not found"; return 1; }
 

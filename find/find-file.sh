@@ -1,4 +1,4 @@
-# dsc:Find regular file.
+# dsc:Find regular file in the current directory recursively.
 # arg:$1 file name or wildcard to search for
 function find-file {
   is-defined $1 || return 1

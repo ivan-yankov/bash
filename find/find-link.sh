@@ -1,4 +1,4 @@
-# dsc:Find symbolic link.
+# dsc:Find symbolic link in the current directory recursively.
 # arg:$1 file name or wildcard to search for
 function find-link {
   is-defined $1 || return 1
