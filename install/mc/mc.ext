@@ -476,7 +476,7 @@ shell/i/.wma
 ### Play lists ###
 
 regex/i/\.(m3u|pls)$
-	Open=/usr/bin/audio-player > /dev/null 2>&1
+	Include=audio
 
 ### Video ###
 
@@ -732,10 +732,10 @@ include/image
 	View=/usr/bin/image-viewer %f > /dev/null 2>&1 &
 
 include/audio
-    Open=/usr/bin/audio-player %f &
+    Open=/usr/bin/audio-player -q %f &
 
 include/video
-	Open=/usr/bin/video-player %f > /dev/null 2>&1 &
+	Open=/usr/bin/video-player -q %f &
 
 include/office
     Open=/usr/bin/office %f > /dev/null 2>&1 &
