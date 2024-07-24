@@ -11,5 +11,5 @@ function java-download {
   local os=$3
   local arch=$4
 
-  curl -X GET -L https://api.adoptium.net/v3/binary/latest/$version/ga/$os/x64/$image_type/hotspot/normal/eclipse --output $image_type-$version.tar.gz
+  curl -X GET -L https://api.adoptium.net/v3/binary/latest/$version/ga/$os/$arch/$image_type/hotspot/normal/eclipse --output $image_type-$version.tar.gz
 }
