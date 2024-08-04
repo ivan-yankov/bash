@@ -12,7 +12,7 @@ function extract-to-dir {
   local dest_path=$4
 
   eval "$cmd $f"
-  d=$(targz-root $f)
+  d=$(arroot $f)
   mv $d $(dirname $f)/$dest_name
   sudo mv $(dirname $f)/$dest_name $dest_path
 }

@@ -1,11 +1,11 @@
-function help-mkar {
-  echo "Make archive."
+function help-lsar {
+  echo "Show archive contents."
   echo
-  echo "Usage: mkar archive-file-name [file]..."
+  echo "Usage: lsar archive-file-name"
   echo "Supported formats: zip, tar, tar.gz"
 }
 
-function mkar {
+function lsar {
   if [  $# -eq 0  ]; then
     help-mkar
     return 1
@@ -19,11 +19,11 @@ function mkar {
   local archive=$1
 
   if [[  "$archive" == *.zip  ]]; then
-    zip -r "$@"
+    unzip -l "$archive"
   elif [[  "$archive" == *.tar  ]]; then
-    tar -cvf "$@"
+    tar -tf "$archive"
   elif [[  "$archive" == *.tar.gz  ]]; then
-    tar -cvzf "$@"
+    tar -ztf "$archive"
   else
     echo "Unsupported archive type."
   fi

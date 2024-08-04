@@ -5,7 +5,7 @@ function java-extract {
   local archive=$1
 
   untargz $archive
-  local d=$(targz-root $archive)
+  local d=$(arroot $archive)
 
   mv $d $(dirname $archive)/$(basename $archive .tar.gz)
 }
