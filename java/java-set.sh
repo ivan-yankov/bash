@@ -1,10 +1,23 @@
-# dsc:Set java for the system.
-# dsc:Expects java to be in /opt/java directory.
-# env:OSTYPE operating system type
-# arg:$1 image type: jdk | jre
-# arg:$2 version: 1, 2, 3, ...
+function help-java-set {
+  echo "Set java to the operating system."
+  echo "Expects java to be in /opt/java directory."
+  echo "OSTYPE operating system type."
+  echo
+  echo "Usage: java-set image version"
+  echo "  image: jdk, jre"
+  echo "  version: 1, 2, 3, ..."
+}
+
 function java-set {
-  is-defined $1 && is-defined $2 && is-defined $OSTYPE || return 1
+  if [  $# -eq 0  ]; then
+    help-java-set
+    return 1
+  fi
+
+  if [[  $1 == "-h"  ]]; then
+    help-java-set
+    return 0
+  fi
 
   local image_type=$1
   local version=$2

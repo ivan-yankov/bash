@@ -1,10 +1,23 @@
-# dsc:Download java.
-# arg:$1 image type: jdk, jre
-# arg:$2 version: 1, 2, 3, ...
-# arg:$3 operating system: linux, windows, mac, solaris, aix, alpine-linux
-# arg:$4 architecture: x64, x86, x32, ppc64, ppc64le, s390x, aarch64, arm, sparcv9, riscv64
+function help-java-download {
+  echo "Java download."
+  echo
+  echo "Usage: java-download image version os arch"
+  echo "  image: jdk, jre"
+  echo "  version: 1, 2, 3, ..."
+  echo "  os: linux, windows, mac, solaris, aix, alpine-linux"
+  echo "  arch: x64, x86, x32, ppc64, ppc64le, s390x, aarch64, arm, sparcv9, riscv64"
+}
+
 function java-download {
-  is-defined $1 && is-defined $2 && is-defined $3 && is-defined $4 || return 1
+  if [  $# -eq 0  ]; then
+    help-java-download
+    return 1
+  fi
+
+  if [[  $1 == "-h"  ]]; then
+    help-java-download
+    return 0
+  fi
 
   local image_type=$1
   local version=$2
