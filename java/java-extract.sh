@@ -4,7 +4,7 @@ function java-extract {
   is-defined $1 || return 1
   local archive=$1
 
-  untargz $archive
+  exar $archive
   local d=$(arroot $archive)
 
   mv $d $(dirname $archive)/$(basename $archive .tar.gz)
