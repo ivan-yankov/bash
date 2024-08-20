@@ -1,6 +1,5 @@
 function help-replace-text {
   echo "Replace text in the specified file."
-  echo "Creates backup for the file specified."
   echo "Text match is case sensitive."
   echo "Requires python."
   echo
@@ -24,8 +23,6 @@ function replace-text {
   local what=$1
   local with=$2
   local file_name=$3
-
-  cp $file_name $file_name.bak
 
   python -c "import sys
 with open(\"$file_name\", 'r') as file:
