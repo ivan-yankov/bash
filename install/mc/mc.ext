@@ -732,10 +732,10 @@ include/image
 	View=/usr/bin/image-viewer %f > /dev/null 2>&1 &
 
 include/audio
-    Open=/usr/bin/audio-player -q %f &
+    Open=/usr/bin/audio-player %f > /dev/null 2>&1 &
 
 include/video
-	Open=/usr/bin/video-player -q %f &
+	Open=/usr/bin/video-player %f > /dev/null 2>&1 &
 
 include/office
     Open=/usr/bin/office %f > /dev/null 2>&1 &
