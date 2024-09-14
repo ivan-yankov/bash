@@ -18,7 +18,7 @@ function html-player {
 
   local file=$(realpath "$1")
   local ext=$(file-ext "$file")
-  local html="<html><body><video width=\"100%\" height=\"100%\" controls><source src=\"$file\" type=\"video/$ext\"></video></body></html>"
+  local html="<html><body style=\"background-color:black;\"><video width=\"100%\" height=\"100%\" controls><source src=\"$file\" type=\"video/$ext\"></video></body></html>"
   local html_file=~/html-player.html
 
   echo $html > $html_file
