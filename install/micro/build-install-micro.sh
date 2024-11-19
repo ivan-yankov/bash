@@ -9,5 +9,5 @@ function build-install-micro {
 
   local cfg=~/.config/micro
   mkdir -p $cfg
-  cp $(dirname $BASH_SOURCE)/bindings.json $cfg
+  cp $(dirname $BASH_SOURCE)/*.json $cfg
 }
