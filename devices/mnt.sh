@@ -18,8 +18,6 @@ function mnt {
       ;;
     *)
       sudo mount $m /mnt/$mp
-      own /mnt/$mp
-      sudo rm -rf /mnt/$mp/lost+found
       ;;
   esac
 }
