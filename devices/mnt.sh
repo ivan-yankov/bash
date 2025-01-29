@@ -9,5 +9,17 @@ function mnt {
   local device=$(sudo blkid | grep $dev)
   local m=${device%:*}
   sudo mkdir -p /mnt/$mp
-  sudo mount $m /mnt/$mp
+
+  local fs=$(blkid $m | grep -oP 'TYPE="\K[^"]+')
+
+  case "$fs" in
+    "vfat")
+      sudo mount -o uid=$USER,gid=$USER $m /mnt/$mp
+      ;;
+    *)
+      sudo mount $m /mnt/$mp
+      own /mnt/$mp
+      sudo rm -rf /mnt/$mp/lost+found
+      ;;
+  esac
 }
