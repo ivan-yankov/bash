@@ -1,7 +1,27 @@
-# dsc:Unmount external USB disk or flash memory.
-# arg:$1 device label
+function help-umnt {
+  echo "Unmount external device mounted at $DEVICE_MOUNT_PATH mount point."
+  echo
+  echo "Usage: umnt mount-point [force]"
+}
+
 function umnt {
-  is-defined $1 || return 1
-  sudo umount /mnt/$1
-  sudo rmdir /mnt/$1
+  if [  $# -eq 0  ]; then
+    help-umnt
+    return 1
+  fi
+
+  if [[  $1 == "-h"  ]]; then
+    help-umnt
+    return 0
+  fi
+
+  local mount_point=$DEVICE_MOUNT_PATH/$1
+  local force=$2
+
+  if [ -n "$2" ] && [ "$2" = "force" ]; then
+    sudo fuser -km $mount_point
+  fi
+
+  sudo umount $mount_point
+  sudo rmdir $mount_point
 }

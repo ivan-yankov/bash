@@ -1,23 +1,38 @@
-# dsc:Mount external device.
-# arg:$1 device file or label
-# arg:$2 mount point, if not provided device file or label will be used instead
+function help-mnt {
+  echo "Mount external device at $DEVICE_MOUNT_PATH mount point."
+  echo
+  echo "Usage: mnt device-label"
+}
+
 function mnt {
-  is-defined $1 || return 1
-  local dev=$1
-  local mp=$dev
-  is-defined $2 > /dev/null && mp=$2
-  local device=$(sudo blkid | grep $dev)
-  local m=${device%:*}
-  sudo mkdir -p /mnt/$mp
+  if [  $# -eq 0  ]; then
+    help-mnt
+    return 1
+  fi
 
-  local fs=$(blkid $m | grep -oP 'TYPE="\K[^"]+')
+  if [[  $1 == "-h"  ]]; then
+    help-mnt
+    return 0
+  fi
 
-  case "$fs" in
-    "vfat")
-      sudo mount -o uid=$USER,gid=$USER $m /mnt/$mp
-      ;;
-    *)
-      sudo mount $m /mnt/$mp
-      ;;
-  esac
+  local device_label=$1
+  local device=$(sudo blkid | grep $device_label)
+  local mount_device=${device%:*}
+  local mount_point=$DEVICE_MOUNT_PATH/$device_label
+
+  if [ -d $mount_point ]; then
+    echo "Mount point already exists."
+    return 2
+  else
+    sudo mkdir $mount_point
+    local fs=$(blkid $mount_device | grep -oP 'TYPE="\K[^"]+')
+    case "$fs" in
+      "vfat")
+        sudo mount -o uid=$USER,gid=$USER $mount_device $mount_point
+        ;;
+      *)
+        sudo mount $mount_device $mount_point
+        ;;
+    esac
+  fi
 }
