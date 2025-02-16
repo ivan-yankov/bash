@@ -1,13 +1,14 @@
-function help-build-ffmpeg-nvenc {
+function help-build-ffmpeg-custom {
   echo "Build ffmpeg with nvidia nvenc encoder engine support."
   echo "This allows to convert video files using hardware acceleration."
+  echo "Uses environment variable REPOS_PATH."
   echo
   echo "Usage: build-ffmpeg-nvenc"
 }
 
-function build-ffmpeg-nvenc {
+function build-ffmpeg-custom {
   if [[  $1 == "-h"  ]]; then
-    help-build-ffmpeg-nvenc
+    help-build-ffmpeg-custom
     return 0
   fi
 
@@ -18,16 +19,22 @@ function build-ffmpeg-nvenc {
     libgnutls28-dev libtool libvorbis-dev libxcb1-dev libxcb-shm0-dev \
     libxcb-xfixes0-dev meson ninja-build pkg-config texinfo wget yasm zlib1g-dev \
     libunistring-dev libva-dev libvdpau-dev libdrm-dev libssl-dev libdav1d-dev
-  
+
+  cd $REPOS_PATH
+
   echo "=== Installing NVIDIA codec headers (NVENC) ==="
+  sudo rm -rf /usr/local/include/nvEncodeAPI.h
+  sudo rm -rf /usr/local/lib/libnvidia-encode*
   if [ -d "nv-codec-headers" ]; then
     rm -rf nv-codec-headers
   fi
   git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
   cd nv-codec-headers
+  git checkout n12.1.14.0
   make
   sudo make install
-  cd ..
+
+  cd $REPOS_PATH
 
   echo "=== Cloning latest FFmpeg ==="
   if [ -d "ffmpeg" ]; then
@@ -35,10 +42,12 @@ function build-ffmpeg-nvenc {
   fi
   git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
   cd ffmpeg
-
+  git checkout n6.0.0
   make distclean
 
   echo "=== Configuring FFmpeg with NVENC support ==="
+  export CFLAGS="-I/usr/local/include -DNVENCAPI_VER=12"
+  export LDFLAGS="-L/usr/local/lib"
   ./configure \
     --prefix=/usr/local \
     --disable-shared \
@@ -58,18 +67,13 @@ function build-ffmpeg-nvenc {
     --enable-libdrm \
     --enable-nvenc \
     --enable-nvdec \
-    --enable-libdav1d \
-    --extra-cflags=-I/usr/local/include \
-    --extra-ldflags=-L/usr/local/lib
+    --enable-libdav1d
 
   echo "=== Building FFmpeg (this may take a while) ==="
   make -j"$(nproc)"
 
   echo "=== Installing FFmpeg ==="
   sudo make install
-
-  echo "=== Verify NVENC support (output should contain V..... h264_nvenc, V..... hevc_nvenc) ==="
-  ffmpeg -encoders | grep nvenc
 
   echo "=== Done ==="
 }

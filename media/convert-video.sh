@@ -79,10 +79,10 @@ function convert-video {
 
   case "$processor" in
     cpu)
-      ffmpeg -i "$input" -c:v libx265 -crf $crf -preset faster -c:a aac -b:a $audio_bitrate "$output"
+      ffmpeg -i "$input" -c:v libx265 -crf $crf -preset faster -c:a aac -b:a $audio_bitrate "$output" || return
       ;;
     gpu)
-      ffmpeg -i "$input" -c:v hevc_nvenc -preset p2 -b:v 0 -rc constqp -cq:v $crf -profile:v main10 -c:a aac -b:a $audio_bitrate "$output"
+      ffmpeg -i "$input" -c:v hevc_nvenc -preset p2 -b:v 0 -rc constqp -cq:v $crf -profile:v main10 -c:a aac -b:a $audio_bitrate "$output" || return
       ;;
     *)
       echo "Unsupported processor: $processor"
