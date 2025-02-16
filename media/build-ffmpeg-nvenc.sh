@@ -17,7 +17,7 @@ function build-ffmpeg-nvenc {
     autoconf automake build-essential cmake git libass-dev libfreetype6-dev \
     libgnutls28-dev libtool libvorbis-dev libxcb1-dev libxcb-shm0-dev \
     libxcb-xfixes0-dev meson ninja-build pkg-config texinfo wget yasm zlib1g-dev \
-    libunistring-dev libva-dev libvdpau-dev libdrm-dev libssl-dev
+    libunistring-dev libva-dev libvdpau-dev libdrm-dev libssl-dev libdav1d-dev
   
   echo "=== Installing NVIDIA codec headers (NVENC) ==="
   if [ -d "nv-codec-headers" ]; then
@@ -58,6 +58,7 @@ function build-ffmpeg-nvenc {
     --enable-libdrm \
     --enable-nvenc \
     --enable-nvdec \
+    --enable-libdav1d \
     --extra-cflags=-I/usr/local/include \
     --extra-ldflags=-L/usr/local/lib
 
