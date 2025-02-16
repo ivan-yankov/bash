@@ -2,10 +2,12 @@
 function build-install-micro {
   local dir=/opt/micro
 
+  sudo mkdir $dir
+
   cd ~/data/repos/go/src/micro && \
   git pull && \
   make && \
-  sudo cp micro $dir
+  sudo cp micro $dir/
 
   local cfg=~/.config/micro
   mkdir -p $cfg
