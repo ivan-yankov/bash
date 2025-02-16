@@ -74,5 +74,5 @@ function convert-video {
   local output_dir="convert-video-output"
   mkdir -p $output_dir
 
-  ffmpeg -i $input -c:v libx265 -crf $crf -preset faster -c:a aac -b:a $audio_bitrate $output_dir/$bname.mp4
+  ffmpeg -i "$input" -c:v libx265 -crf $crf -preset faster -c:a aac -b:a $audio_bitrate "$output_dir/$bname.mp4"
 }
