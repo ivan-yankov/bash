@@ -12,4 +12,6 @@ function build-install-micro {
   local cfg=~/.config/micro
   mkdir -p $cfg
   cp $(dirname $BASH_SOURCE)/*.json $cfg
+
+  sudo apt install xclip
 }
