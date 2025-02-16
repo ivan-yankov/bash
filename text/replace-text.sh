@@ -1,34 +1,25 @@
 function help-replace-text {
-  echo "Replace text in the specified file."
+  echo "Replace text in a specified file."
   echo "Text match is case sensitive."
-  echo "Requires python."
   echo
-  echo "Usage: replace-text what with file"
-  echo "  what: text to search for"
-  echo "  with: text to replace with"
-  echo "  file: file to search in"
+  echo "Usage: replace-text <what> <with> <file>"
 }
 
 function replace-text {
-  if [  $# -eq 0  ]; then
+  if [[ $# -lt 3 || $1 == "-h" ]]; then
     help-replace-text
-    return 1
+    return $([[ $1 == "-h" ]] && echo 0 || echo 1)
   fi
 
-  if [[  $1 == "-h"  ]]; then
-    help-replace-text
-    return 0
+  local WHAT=$1
+  local WITH=$2
+  local FILE=$3
+
+  if command -v sd &>/dev/null; then
+    # -s treats input as literal string (no regex escaping needed)
+    sd -s "$WHAT" "$WITH" "$FILE"
+  else
+    # Cross-platform perl fallback if sd is not installed
+    perl -pi -e 's/'"$(printf '%s' "$WHAT" | sed 's/[=\/&]/\\&/g')"'/'"$(printf '%s' "$WITH" | sed 's/[=\/&]/\\&/g')"'/' "$FILE"
   fi
-
-  local what=$1
-  local with=$2
-  local file_name=$3
-
-  python -c "import sys
-with open(\"$file_name\", 'r') as file:
-  data = file.read()
-  data = data.replace(\"$what\", \"$with\")
-
-with open(\"$file_name\", 'w') as file:
-  file.write(data)"
 }
