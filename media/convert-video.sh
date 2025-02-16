@@ -8,10 +8,9 @@ function help-convert-video {
   echo "  AAC, default 128k"
   
   echo
-  echo "Usage: convert-video input-file video-quality audio-quality compression-level"
+  echo "Usage: convert-video input-file video-quality audio-quality"
   echo "  video-quality: lossless (very slow processing, huge file) | high | medium | low"
   echo "  audio-quality: best (320k) | high (256k) | medium (192k) | low (128k)"
-  echo "  compression-level: high | balanced | low"
 }
 
 function convert-video {
@@ -28,7 +27,6 @@ function convert-video {
   local input="$1"
   local vq="$2"
   local aq="$3"
-  local cl="$4"
 
   filename=$(basename -- "$input")
   bname="${filename%.*}"
@@ -73,25 +71,8 @@ function convert-video {
     ;;
   esac
 
-  preset=medium
-  case "$cl" in
-    high)
-      preset=slower
-      ;;
-    balanced)
-      preset=medium
-      ;;
-    low)
-      preset=faster
-      ;;
-    *)
-      echo "Unsupported compression level: $cl"
-      return
-      ;;
-  esac
-
   local output_dir="convert-video-output"
   mkdir -p $output_dir
 
-  ffmpeg -i $input -c:v libx265 -crf $crf -preset $preset -c:a aac -b:a $audio_bitrate $output_dir/$bname.mp4
+  ffmpeg -i $input -c:v libx265 -crf $crf -preset faster -c:a aac -b:a $audio_bitrate $output_dir/$bname.mp4
 }
