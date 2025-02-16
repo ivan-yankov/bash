@@ -21,12 +21,12 @@ function newmvn {
   local package_path=com/example
   local run_file=$name/run
   local version='1.0-SNAPSHOT'
-  local main_file=$name/src/main/java/$package_path/$name/$main_class.java
+  local main_file=$name/src/main/java/$package_path/$main_class.java
 
   mvn archetype:generate -DgroupId=$package.$name -DartifactId=$name -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 
-  rm $name/src/main/java/$package_path/$name/*
-  rm $name/src/test/java/$package_path/$name/*
+  rm -rf $name/src/main/java/$package_path/$name
+  rm -rf $name/src/test/java/$package_path/$name
 
   touch $main_file
   echo "package $package;" > $main_file
