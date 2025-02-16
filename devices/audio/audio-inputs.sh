@@ -1,4 +1,14 @@
-# dsc:List audio inputs.
+function help-audio-inputs {
+  echo "List audio inputs."
+  echo
+  echo "Usage: audio-inputs"
+}
+
 function audio-inputs {
-  pacmd list-sources
+  if [[  $1 == "-h"  ]]; then
+    help-audio-inputs
+    return 0
+  fi
+
+  pactl list short sources
 }
