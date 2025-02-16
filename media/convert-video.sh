@@ -1,15 +1,17 @@
 function help-convert-video {
-  echo "Video conversion."
-  echo "Supported formats: mp4, webm."
-  echo "If video and audio codecs are compatible only container will be changed and content will not be re-encoded."
-  echo "Otherwise re-encoding will be performed as per provided parameters."
-  echo "Audio conversion is always lossless."
-  echo "Compression level does not affect quality, but conversion speed."
+  echo "Convert video to mp4 format for archiving with consistent encoding."
+  echo "Video encoder"
+  echo "  HEVC - smaller files for same quality compared to AVC"
+  echo "  CPU processing - slower than NVIDIA GPU, but gives better quality because of deeper video analysis"
+  echo "  Output quality - as per given parameter"
+  echo "Audio encoder:"
+  echo "  AAC, default 128k"
   
   echo
-  echo "Usage: convert-video input-file output-format video-quality compression-level"
-  echo "  video-quality: best | high | medium | low"
-  echo "  compression-level: high | medium | low"
+  echo "Usage: convert-video input-file video-quality audio-quality compression-level"
+  echo "  video-quality: lossless (very slow processing, huge file) | high | medium | low"
+  echo "  audio-quality: best (320k) | high (256k) | medium (192k) | low (128k)"
+  echo "  compression-level: high | balanced | low"
 }
 
 function convert-video {
@@ -23,83 +25,73 @@ function convert-video {
     return 0
   fi
 
-  input="$1"
-  output_format="$2"
-  quality="$3"
-  compression="$4"
+  local input="$1"
+  local vq="$2"
+  local aq="$3"
+  local cl="$4"
 
   filename=$(basename -- "$input")
-  basename="${filename%.*}"
+  bname="${filename%.*}"
 
   crf=0
-  case "$quality" in
-    best)
+  case "$vq" in
+    lossless)
       crf=0
       ;;
     high)
-      crf=15
+      crf=20
       ;;
     medium)
       crf=25
       ;;
     low)
-      crf=50
+      crf=28
       ;;
     *)
-    echo "Unsupported quality: $quality"
-    exit 1
+    echo "Unsupported video quality: $vq"
+    return
     ;;
   esac
 
-  cmp=placebo
-  case "$compression" in
+  audio_bitrate="320k"
+  case "$aq" in
+    best)
+      audio_bitrate="320k"
+      ;;
     high)
-      cmp=placebo      
+      audio_bitrate="256k"
       ;;
     medium)
-      cmp=medium
+      audio_bitrate="192k"
       ;;
     low)
-      cmp=ultrafast
+      audio_bitrate="128k"
       ;;
     *)
-    echo "Unsupported compression level: $compression"
-    exit 1
+    echo "Unsupported audio quality: $aq"
+    return
     ;;
   esac
 
-  vcodec=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$input")
-  acodec=$(ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of csv=p=0 "$input")
-
-  compatible=false
-  if { [ "$vcodec" = "vp8" ] || [ "$vcodec" = "vp9" ] || [ "$vcodec" = "av1" ]; } && { [ "$acodec" = "vorbis" ] || [ "$acodec" = "opus" ]; }; then
-      compatible=true
-  fi
-
-  case "$output_format" in
-    mp4)
-      output="${basename}.mp4"
-      if $compatible; then
-        echo "Codecs are compatible, conversion without re-encoding."
-        ffmpeg -i "$input" -c copy "$output"
-      else
-        echo "Codecs are not compatible, conversion with re-encoding."
-        ffmpeg -i "$input" -c:v libx264 -crf $crf -preset $cmp -c:a pcm_s16le "$output"
-      fi
+  preset=medium
+  case "$cl" in
+    high)
+      preset=slower
       ;;
-    webm)
-      output="${basename}.webm"
-      if $compatible; then
-        echo "Codecs are compatible, conversion without re-encoding."
-        ffmpeg -i "$input" -c copy "$output"
-      else
-        echo "Codecs are not compatible, conversion with re-encoding."
-        ffmpeg -i "$input" -c:v libvpx-vp9 -crf $crf -preset $cmp -c:a libopus -b:a 512k "$output"
-      fi
+    balanced)
+      preset=medium
+      ;;
+    low)
+      preset=faster
       ;;
     *)
-      echo "Unsupported input file format: $extension"
-      exit 1
+      echo "Unsupported compression level: $cl"
+      return
       ;;
   esac
+
+  local output_dir="convert-video-output"
+  mkdir -p $output_dir
+
+  ffmpeg -i $input -c:v libx265 -crf $crf -preset $preset -c:a aac -b:a $audio_bitrate $output_dir/$bname.mp4
 }
