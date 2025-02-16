@@ -31,8 +31,9 @@ function convert-video {
   local aq="$3"
   local processor="$4"
 
-  filename=$(basename -- "$input")
-  bname="${filename%.*}"
+  local filename="$(basename -- "$input")"
+  local dir="$(realpath -- "$(dirname -- "$input")")"
+  local bname="${filename%.*}"
 
   crf=0
   case "$vq" in
@@ -74,7 +75,7 @@ function convert-video {
     ;;
   esac
 
-  local output="${bname}_output.mp4"
+  local output="$dir/${bname}_output.mp4"
 
   case "$processor" in
     cpu)
@@ -90,7 +91,7 @@ function convert-video {
   esac
 
   if [[ "$5" == "replace" ]]; then
-      rm "$input"
-      mv "$output" "$bname.mp4"
+    rm "$input"
+    mv "$output" "$dir/${bname}.mp4"
   fi
 }
