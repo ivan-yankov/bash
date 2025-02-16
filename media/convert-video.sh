@@ -1,6 +1,6 @@
 function help-convert-video {
   echo "Video conversion."
-  echo "Supported formats mp4, webm."
+  echo "Supported formats: mp4, webm."
   echo "If video and audio codecs are compatible only container will be changed and content will not be re-encoded."
   echo "Otherwise re-encoding will be performed as per provided parameters."
   echo "Audio conversion is always lossless."
@@ -25,24 +25,11 @@ function convert-video {
 
   input="$1"
   output_format="$2"
-  quality="#3"
+  quality="$3"
   compression="$4"
 
   filename=$(basename -- "$input")
   basename="${filename%.*}"
-
-  cmp=placebo
-  case "$compression" in
-    high)
-      cmp=placebo      
-      ;;
-    medium)
-      cmp=medium
-      ;;
-    low)
-      cmp=ultrafast
-      ;;
-  esac
 
   crf=0
   case "$quality" in
@@ -58,6 +45,27 @@ function convert-video {
     low)
       crf=50
       ;;
+    *)
+    echo "Unsupported quality: $quality"
+    exit 1
+    ;;
+  esac
+
+  cmp=placebo
+  case "$compression" in
+    high)
+      cmp=placebo      
+      ;;
+    medium)
+      cmp=medium
+      ;;
+    low)
+      cmp=ultrafast
+      ;;
+    *)
+    echo "Unsupported compression level: $compression"
+    exit 1
+    ;;
   esac
 
   vcodec=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$input")
@@ -91,7 +99,6 @@ function convert-video {
       ;;
     *)
       echo "Unsupported input file format: $extension"
-      echo "Only mp4 and webm are supported."
       exit 1
       ;;
   esac
