@@ -1,5 +1,5 @@
-function help-format {
-  echo "Format drive."
+function help-label {
+  echo "Set drive label without formatting."
   echo "Drive must be unmount and specified by path, for example /dev/sdc1"
   echo "Supported file systems are:"
   echo "  ext4: ext4"
@@ -9,14 +9,14 @@ function help-format {
   echo "Usage: format drive-path file-system label"
 }
 
-function format {
+function label {
   if [  $# -eq 0  ]; then
-    help-format
+    help-label
     return 1
   fi
 
   if [[  $1 == "-h"  ]]; then
-    help-format
+    help-label
     return 0
   fi
 
@@ -24,7 +24,18 @@ function format {
   local fs=$2
   local label=$3
 
-  sudo mkfs.$fs $dev
-
-  label $dev $fs $label
+  case $fs in
+    "ext4")
+      sudo e2label $dev $label
+      ;;
+    "vfat")
+      sudo mlabel -i $dev ::$label
+      ;;
+    "ntfs")
+      sudo ntfslabel $dev $label
+      ;;
+    *)
+      echo "Unsupported file system $fs"
+      ;;
+  esac
 }
