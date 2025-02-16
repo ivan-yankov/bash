@@ -16,5 +16,5 @@ function ft {
   fzf --ansi \
       --delimiter : \
       --preview 'bat --style=numbers --color=always --highlight-line {2} {1} 2>/dev/null || cat {1}' \
-      --preview-window 'right:60%:+{2}'
+      --preview-window 'right:60%:+{2}-5'
 }
