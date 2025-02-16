@@ -8,10 +8,11 @@ function help-convert-video {
   echo "  AAC, default 128k"
   
   echo
-  echo "Usage: convert-video input-file video-quality audio-quality processor"
+  echo "Usage: convert-video input-file video-quality audio-quality processor [replace]"
   echo "  video-quality: lossless (very slow processing, huge file) | high | medium | low"
   echo "  audio-quality: best (320k) | high (256k) | medium (192k) | low (128k)"
   echo "  processor: cpu (slower conversion, smaller file) | gpu (faster conversion, bigger file)"
+  echo "  replace: replace original file"
 }
 
 function convert-video {
@@ -73,19 +74,23 @@ function convert-video {
     ;;
   esac
 
-  local output_dir="convert-video-output"
-  mkdir -p $output_dir
+  local output="${bname}_output.mp4"
 
   case "$processor" in
     cpu)
-      ffmpeg -i "$input" -c:v libx265 -crf $crf -preset faster -c:a aac -b:a $audio_bitrate "$output_dir/$bname.mp4"
+      ffmpeg -i "$input" -c:v libx265 -crf $crf -preset faster -c:a aac -b:a $audio_bitrate "$output"
       ;;
     gpu)
-      ffmpeg -i "$input" -c:v hevc_nvenc -preset p2 -b:v 0 -rc constqp -cq:v $crf -profile:v main10 -c:a aac -b:a $audio_bitrate "$output_dir/$bname.mp4"
+      ffmpeg -i "$input" -c:v hevc_nvenc -preset p2 -b:v 0 -rc constqp -cq:v $crf -profile:v main10 -c:a aac -b:a $audio_bitrate "$output"
       ;;
     *)
       echo "Unsupported processor: $processor"
       return
       ;;
   esac
+
+  if [[ "$5" == "replace" ]]; then
+      rm "$input"
+      mv "$output" "$bname.mp4"
+  fi
 }
