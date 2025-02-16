@@ -1,7 +1,19 @@
-# dsc:Compare two directories.
-# arg:$1 first directory
-# arg:$2 second directory
+function help-diff-dir {
+  echo "Compare two directories."
+  echo
+  echo "Usage: diff-dir dir1 dir2"
+}
+
 function diff-dir {
-  is-defined $1 && is-defined $2 || return 1
+  if [  $# -eq 0  ]; then
+    help-diff-dir
+    return 1
+  fi
+
+  if [[  $1 == "-h"  ]]; then
+    help-diff-dir
+    return 0
+  fi
+
   diff -qr $1 $2
 }
