@@ -1,7 +1,7 @@
 function help-build-ffmpeg-custom {
   echo "Build ffmpeg with nvidia nvenc encoder engine support."
   echo "This allows to convert video files using hardware acceleration."
-  echo "Uses environment variable REPOS_PATH."
+  echo "Uses environment variable REPOS_DIR."
   echo
   echo "Usage: build-ffmpeg-nvenc"
 }
@@ -20,7 +20,7 @@ function build-ffmpeg-custom {
     libxcb-xfixes0-dev meson ninja-build pkg-config texinfo wget yasm zlib1g-dev \
     libunistring-dev libva-dev libvdpau-dev libdrm-dev libssl-dev libdav1d-dev
 
-  cd $REPOS_PATH
+  cd $REPOS_DIR
 
   echo "=== Installing NVIDIA codec headers (NVENC) ==="
   sudo rm -rf /usr/local/include/nvEncodeAPI.h
@@ -34,7 +34,7 @@ function build-ffmpeg-custom {
   make
   sudo make install
 
-  cd $REPOS_PATH
+  cd $REPOS_DIR
 
   echo "=== Cloning latest FFmpeg ==="
   if [ -d "ffmpeg" ]; then
