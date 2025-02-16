@@ -1,7 +1,7 @@
 function help-exar {
   echo "Extract archive."
   echo
-  echo "Usage: exar archive-file-name"
+  echo "Usage: exar archive-file-name [target-dir]"
   echo "Supported formats: zip, tar, tar.gz"
 }
 
@@ -17,14 +17,22 @@ function exar {
   fi
 
   local archive=$1
+  shift || true  # now $1 is optional target dir
+  local target="${1:-.}"
 
-  if [[  "$archive" == *.zip  ]]; then
-    unzip "$@"
-  elif [[  "$archive" == *.tar  ]]; then
-    tar -xvf "$@"
-  elif [[  "$archive" == *.tar.gz  ]]; then
-    tar -xvzf "$@"
-  else
-    echo "Unsupported archive type."
-  fi
+  case "$archive" in
+    *.tar.gz|*.tgz)
+      tar -xvzf "$archive" -C "$target"
+      ;;
+    *.tar)
+      tar -xvf "$archive" -C "$target"
+      ;;
+    *.zip)
+      unzip "$archive" -d "$target"
+      ;;
+    *)
+      echo "Unsupported archive type: $archive" >&2
+      return 2
+      ;;
+  esac
 }

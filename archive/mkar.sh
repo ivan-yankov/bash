@@ -17,14 +17,20 @@ function mkar {
   fi
 
   local archive=$1
+  shift # remove archive name from args, so "$@" is just the files/dirs
 
-  if [[  "$archive" == *.zip  ]]; then
-    zip -r "$@"
-  elif [[  "$archive" == *.tar  ]]; then
-    tar -cvf "$@"
-  elif [[  "$archive" == *.tar.gz  ]]; then
-    tar -cvzf "$@"
-  else
-    echo "Unsupported archive type."
-  fi
+  case "$archive" in
+    *.tar.gz|*.tgz)
+      tar -cvzf "$archive" "$@"
+      ;;
+    *.tar)
+      tar -cvf "$archive" "$@"
+      ;;
+    *.zip)
+      zip -r "$archive" "$@"
+      ;;
+    *)
+      echo "Unsupported archive type: $archive"
+      ;;
+  esac
 }
