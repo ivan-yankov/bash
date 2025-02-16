@@ -1,7 +1,7 @@
 function help-desktop-file {
   echo "Create desktop file for an executable."
-  echo "The file will be available in 'Show Applications' and can be added to the Dock by RightClick -> Add to Favorites."
-  echo "startup-wm-class needs to be defined to avoid icon duplication in Dock at launch."
+  echo "The file will be available in 'Show Applications'."
+  echo "startup-wm-class needs to be defined to allow icon to be added to the Dock and to avoid icon duplication in Dock at launch."
   echo "To get startup-wm-class:"
   echo "  - Start the application"
   echo "  - Run 'xprop WM_CLASS' in terminal"
