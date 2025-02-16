@@ -7,6 +7,7 @@ function install-mc {
   mkdir -p $cfg
   local src=$(dirname $BASH_SOURCE)
   cp $src/ini $cfg
+  cp $cfg/mc.ext $cfg/mc.ext.bak
   cp $src/mc.ext $cfg
   cp $src/panels.ini $cfg
 }
