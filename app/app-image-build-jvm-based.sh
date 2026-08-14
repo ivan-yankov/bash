@@ -58,7 +58,16 @@ function app-image-build-jvm-based {
   } > "$desktop"
 
   cp "$icon_file" "$app_dir/icon.png"
-  cp "$project_dir/$application_jars" "$app_dir/jar"
+
+  # ApplicationJars is often a pattern such as 'jar/*', so it is expanded here
+  # rather than handed to cp as a literal path.
+  local jars=()
+  mapfile -t jars < <(compgen -G "$project_dir/$application_jars")
+  if [ ${#jars[@]} -eq 0 ]; then
+    echo "app-image-build-jvm-based: no jars matched [$project_dir/$application_jars]" >&2
+    return 1
+  fi
+  cp "${jars[@]}" "$app_dir/jar"
 
   # The java-* commands were removed when java management moved to SDKMAN, so
   # the JRE archive has to be placed in the cache directory beforehand.
@@ -69,8 +78,19 @@ function app-image-build-jvm-based {
     return 1
   fi
 
+  # The directory inside the archive is named after the JRE build, such as
+  # jdk-17.0.6+10-jre, which has nothing to do with the archive's own name.
+  # Read it from the archive instead of assuming it matches the version.
+  local jre_root
+  jre_root=$(tar -tzf "$jre_archive" | head -1 | cut -d/ -f1)
+  if [ -z "$jre_root" ]; then
+    echo "app-image-build-jvm-based: cannot read [$jre_archive]" >&2
+    return 1
+  fi
+
+  rm -rf "${cache_dir:?}/$jre_root"
   tar -xzf "$jre_archive" -C "$cache_dir" || return
-  mv "$cache_dir/jre-$jvm_version" "$app_dir/jre"
+  mv "$cache_dir/$jre_root" "$app_dir/jre" || return
 
   local arch
   arch=$(uname -m)

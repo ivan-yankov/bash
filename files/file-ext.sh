@@ -5,6 +5,6 @@ function file-ext {
   cmd-parse "$@" || return $CMD_RC
 
   local name
-  name=$(file-name "$ARG_path")
+  name=$(file-name -- "$ARG_path")
   echo "${name##*.}"
 }

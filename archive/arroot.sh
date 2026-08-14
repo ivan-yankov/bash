@@ -5,5 +5,5 @@ function arroot {
   cmd-example "arroot backup.tar.gz"
   cmd-parse "$@" || return $CMD_RC
 
-  lsar "$ARG_archive" | head -1 | cut -f1 -d "/"
+  lsar -- "$ARG_archive" | head -1 | cut -f1 -d "/"
 }

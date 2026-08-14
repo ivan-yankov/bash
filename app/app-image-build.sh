@@ -19,6 +19,6 @@ function app-image-build {
     application_name=$(get-ini-value ApplicationName "$ini_file")
     app_image=$ARG_target/$application_name.AppImage
 
-    app-image-build-jvm-based "$ini_file" "$cache_dir" "$app_image"
+    app-image-build-jvm-based -- "$ini_file" "$cache_dir" "$app_image"
   done
 }

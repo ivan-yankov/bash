@@ -47,6 +47,26 @@ test_file_name_without_ext_handles_spaces() {
   assert_eq "my report" "$output"
 }
 
+# A leading dash makes the parser see an option, so such a path is passed
+# after '--'. The command must then hand it on the same way internally.
+test_file_name_accepts_a_leading_dash_path_after_separator() {
+  run file-name -- "-report.txt"
+  assert_rc 0 "$rc"
+  assert_eq "-report.txt" "$output"
+}
+
+test_file_ext_accepts_a_leading_dash_path_after_separator() {
+  run file-ext -- "-report.txt"
+  assert_rc 0 "$rc"
+  assert_eq "txt" "$output"
+}
+
+test_file_name_without_ext_accepts_a_leading_dash_path_after_separator() {
+  run file-name-without-ext -- "-report.txt"
+  assert_rc 0 "$rc"
+  assert_eq "-report" "$output"
+}
+
 test_file_name_requires_argument() {
   run file-name
   assert_rc_nonzero "$rc"

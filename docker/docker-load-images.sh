@@ -8,7 +8,7 @@ function docker-load-images {
   local file id repo tag
   for file in "$ARG_source"/*.tar; do
     [ -f "$file" ] || continue
-    id=$(file-name-without-ext "$file")
+    id=$(file-name-without-ext -- "$file")
     repo=$(cat "$ARG_source/$id.repository")
     tag=$(cat "$ARG_source/$id.tag")
 

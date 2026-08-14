@@ -5,6 +5,6 @@ function extract-audio {
   cmd-parse "$@" || return $CMD_RC
 
   local output
-  output=$(file-name-without-ext "$ARG_input").mp3
+  output=$(file-name-without-ext -- "$ARG_input").mp3
   ffmpeg -i "$ARG_input" "$output"
 }
