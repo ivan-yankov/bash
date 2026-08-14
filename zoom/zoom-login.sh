@@ -1,7 +1,9 @@
-# dsc:Start zoom messenger with login
-# arg:$1 user name
-# arg:$2 password
 function zoom-login {
-  is-defined $1 && is-defined $2 || return 1
-  zoom --username=$1 --password=$2 &
+  cmd-dsc "Start the zoom client and log in."
+  cmd-arg user string "User name"
+  cmd-arg password string "Password"
+  cmd-example "zoom-login me@example.com secret"
+  cmd-parse "$@" || return $CMD_RC
+
+  zoom --username="$ARG_user" --password="$ARG_password" &
 }

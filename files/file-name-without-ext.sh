@@ -1,7 +1,10 @@
-# dsc:Get file name without path and extension.
-# arg:$1 path to the file
 function file-name-without-ext {
-  is-defined $1 || return 1
-  local fn=$(file-name "$1")
-  echo "${fn%.*}"
+  cmd-dsc "Get the file name without its directory and extension."
+  cmd-arg path string "Path to the file"
+  cmd-example "file-name-without-ext /a/b/report.txt"
+  cmd-parse "$@" || return $CMD_RC
+
+  local name
+  name=$(file-name "$ARG_path")
+  echo "${name%.*}"
 }

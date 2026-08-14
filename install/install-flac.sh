@@ -1,4 +1,7 @@
-# dsc:Install flac audio codec.
 function install-flac {
-  sudo apt install flac
+  cmd-dsc "Install the flac audio codec."
+  cmd-example "install-flac"
+  cmd-parse "$@" || return $CMD_RC
+
+  sudo apt install -y flac
 }

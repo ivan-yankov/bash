@@ -1,26 +1,22 @@
-function help-html-player {
-  echo "Play webm and mp4 files in a browser with possibility to chromecast."
-  echo "It uses chromium browser to chromecast. However chromium browser cannot access /tmp directory for example. It can access only /home directory."
-  echo
-  echo "Usage: html-player file"
-}
-
 function html-player {
-  if [  $# -eq 0  ]; then
-    help-html-player
-    return 1
-  fi
+  cmd-dsc "Play a webm or mp4 file in the browser, so it can be cast."
+  cmd-dsc "Chromium is used because it can cast, but it can only read files"
+  cmd-dsc "under the home directory, so the page is written there."
+  cmd-arg file file "Video file to play"
+  cmd-example "html-player holiday.mp4"
+  cmd-parse "$@" || return $CMD_RC
 
-  if [[  $1 == "-h"  ]]; then
-    help-html-player
-    return 0
-  fi
+  local path ext html_file
+  path=$(realpath "$ARG_file")
+  ext=$(file-ext "$path")
+  html_file=~/html-player.html
 
-  local file=$(realpath "$1")
-  local ext=$(file-ext "$file")
-  local html="<html><body style=\"background-color:black;\"><video width=\"100%\" height=\"100%\" controls><source src=\"$file\" type=\"video/$ext\"></video></body></html>"
-  local html_file=~/html-player.html
+  cat > "$html_file" <<HTML
+<html><body style="background-color:black;">
+<video width="100%" height="100%" controls>
+<source src="$path" type="video/$ext">
+</video></body></html>
+HTML
 
-  echo $html > $html_file
-  chromium $html_file &
+  chromium "$html_file" &
 }

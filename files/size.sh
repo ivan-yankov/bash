@@ -1,6 +1,8 @@
-# dsc:Calculate size of the file / directory.
-# arg:$1 file or directory
 function size {
-  is-defined $1 || return 1
-  sudo du -sh $1
+  cmd-dsc "Show the size of a file or directory."
+  cmd-arg target path "File or directory to measure"
+  cmd-example "size ~/data"
+  cmd-parse "$@" || return $CMD_RC
+
+  sudo du -sh "$ARG_target"
 }

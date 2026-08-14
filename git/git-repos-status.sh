@@ -1,15 +1,16 @@
-# dsc:Show git repositories status.
-# dsc:Should be ran in repositories parent directory.
-# env:$COLOR_GREEN console green color
-# env:$COLOR_RESET console reset color
 function git-repos-status {
-  is-defined $COLOR_GREEN && is-defined $COLOR_RESET || return 1
+  cmd-dsc "Show the status of every git repository in the current directory."
+  cmd-dsc "Run this in the directory that holds the repositories."
+  cmd-example "git-repos-status"
+  cmd-parse "$@" || return $CMD_RC
 
+  local d
   for d in */; do
-    printf "${COLOR_GREEN}${d}${COLOR_RESET}\n"
-    cd $d
-    git status
-    cd ..
+    [ -d "$d/.git" ] || continue
+    printf '%s%s%s\n' "$COLOR_GREEN" "$d" "$COLOR_RESET"
+    # A subshell keeps the caller's working directory intact even when the
+    # repository command fails.
+    ( cd "$d" && git status )
     echo
   done
 }

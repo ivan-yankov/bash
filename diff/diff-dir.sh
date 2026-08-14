@@ -1,19 +1,9 @@
-function help-diff-dir {
-  echo "Compare two directories."
-  echo
-  echo "Usage: diff-dir dir1 dir2"
-}
-
 function diff-dir {
-  if [  $# -eq 0  ]; then
-    help-diff-dir
-    return 1
-  fi
+  cmd-dsc "Compare two directories recursively, reporting which files differ."
+  cmd-arg left dir "First directory"
+  cmd-arg right dir "Second directory"
+  cmd-example "diff-dir ./a ./b"
+  cmd-parse "$@" || return $CMD_RC
 
-  if [[  $1 == "-h"  ]]; then
-    help-diff-dir
-    return 0
-  fi
-
-  diff -qr $1 $2
+  diff -qr "$ARG_left" "$ARG_right"
 }

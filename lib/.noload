@@ -1,0 +1,2 @@
+Marker file. The loader skips this directory and everything below it,
+so development-only sources are never sourced into an interactive shell.

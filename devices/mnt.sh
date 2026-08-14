@@ -1,38 +1,24 @@
-function help-mnt {
-  echo "Mount external device at $DEVICE_MOUNT_PATH mount point."
-  echo
-  echo "Usage: mnt device-label"
-}
-
 function mnt {
-  if [  $# -eq 0  ]; then
-    help-mnt
-    return 1
-  fi
+  cmd-dsc "Mount an external device by its label, under DEVICE_MOUNT_PATH."
+  cmd-arg device-label string "Label of the device to mount"
+  cmd-env DEVICE_MOUNT_PATH "Directory the mount points are created under"
+  cmd-example "mnt backup"
+  cmd-parse "$@" || return $CMD_RC
 
-  if [[  $1 == "-h"  ]]; then
-    help-mnt
-    return 0
-  fi
+  local device mount_device mount_point fs
+  device=$(sudo blkid | grep "$ARG_device_label")
+  mount_device=${device%:*}
+  mount_point=$DEVICE_MOUNT_PATH/$ARG_device_label
 
-  local device_label=$1
-  local device=$(sudo blkid | grep $device_label)
-  local mount_device=${device%:*}
-  local mount_point=$DEVICE_MOUNT_PATH/$device_label
-
-  if [ -d $mount_point ]; then
-    echo "Mount point already exists."
+  if [ -d "$mount_point" ]; then
+    echo "Mount point already exists." >&2
     return 2
-  else
-    sudo mkdir $mount_point
-    local fs=$(blkid $mount_device | grep -oP 'TYPE="\K[^"]+')
-    case "$fs" in
-      "vfat")
-        sudo mount -o uid=$USER,gid=$USER $mount_device $mount_point
-        ;;
-      *)
-        sudo mount $mount_device $mount_point
-        ;;
-    esac
   fi
+
+  sudo mkdir "$mount_point"
+  fs=$(blkid "$mount_device" | grep -oP 'TYPE="\K[^"]+')
+  case "$fs" in
+    vfat) sudo mount -o "uid=$USER,gid=$USER" "$mount_device" "$mount_point" ;;
+    *)    sudo mount "$mount_device" "$mount_point" ;;
+  esac
 }

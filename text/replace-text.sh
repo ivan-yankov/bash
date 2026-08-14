@@ -1,25 +1,18 @@
-function help-replace-text {
-  echo "Replace text in a specified file."
-  echo "Text match is case sensitive."
-  echo
-  echo "Usage: replace-text <what> <with> <file>"
-}
-
 function replace-text {
-  if [[ $# -lt 3 || $1 == "-h" ]]; then
-    help-replace-text
-    return $([[ $1 == "-h" ]] && echo 0 || echo 1)
-  fi
-
-  local WHAT=$1
-  local WITH=$2
-  local FILE=$3
+  cmd-dsc "Replace text in a file. The match is case sensitive and literal."
+  cmd-arg what string "Text to replace"
+  cmd-arg with string "Replacement text"
+  cmd-arg file file "File to modify"
+  cmd-example "replace-text quick slow sample.txt"
+  cmd-parse "$@" || return $CMD_RC
 
   if command -v sd &>/dev/null; then
-    # -s treats input as literal string (no regex escaping needed)
-    sd -s "$WHAT" "$WITH" "$FILE"
+    # -s treats the input as a literal string, so nothing needs escaping.
+    sd -s "$ARG_what" "$ARG_with" "$ARG_file"
   else
-    # Cross-platform perl fallback if sd is not installed
-    perl -pi -e 's/'"$(printf '%s' "$WHAT" | sed 's/[=\/&]/\\&/g')"'/'"$(printf '%s' "$WITH" | sed 's/[=\/&]/\\&/g')"'/' "$FILE"
+    # Cross-platform perl fallback when sd is not installed. \Q..\E quotes the
+    # pattern so it stays literal.
+    perl -pi -e 'BEGIN { ($w, $r) = @ARGV; splice(@ARGV, 0, 2) } s/\Q$w\E/$r/g' \
+      "$ARG_what" "$ARG_with" "$ARG_file"
   fi
 }

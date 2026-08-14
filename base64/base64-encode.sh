@@ -1,6 +1,8 @@
-# dsc:Encode string to base64.
-# arg:$1 string to be encoded
 function base64-encode {
-  is-defined $1 || return 1
-  echo -n $1 | base64
+  cmd-dsc "Encode a string to base64."
+  cmd-arg value string "String to encode"
+  cmd-example "base64-encode hello"
+  cmd-parse "$@" || return $CMD_RC
+
+  printf '%s' "$ARG_value" | base64
 }

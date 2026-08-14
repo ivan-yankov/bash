@@ -1,8 +1,14 @@
-# dsc:Install and configure asunder audio ripping software.
 function install-asunder {
-  sudo apt install asunder
+  cmd-dsc "Install the asunder audio ripper and copy its configuration."
+  cmd-example "install-asunder"
+  cmd-parse "$@" || return $CMD_RC
+
+  sudo apt install -y asunder
 
   local cfg=~/.config/asunder
-  mkdir -p $cfg
-  cp $(dirname $BASH_SOURCE)/asunder $cfg
+  local src
+  src=$(dirname "${BASH_SOURCE[0]}")
+
+  mkdir -p "$cfg"
+  cp "$src/asunder" "$cfg"
 }

@@ -1,16 +1,21 @@
-# dsc:Install fix hotkeys in xorg used in linux ubuntu.
-# dsc:Due to bug introduced hotkeys trigger happens on key-press instead of key-release.
-# dsc:This prevents hotkeys with more than two keys to work properly.
-# dsc:https://launchpad.net/~nrbrtx/+archive/ubuntu/xorg-hotkeys
 function install-xorg-hotkeys-fix {
-  sudo apt-add-repository ppa:nrbrtx/xorg-hotkeys
-  sudo apt-get update
-  sudo apt-get install --only-upgrade xserver-common xserver-xorg-core xserver-xorg-legacy -y
+  cmd-dsc "Install the xorg hotkeys fix used on Ubuntu."
+  cmd-dsc "A bug makes hotkeys trigger on key press instead of key release,"
+  cmd-dsc "which stops hotkeys of more than two keys working properly."
+  cmd-dsc "See https://launchpad.net/~nrbrtx/+archive/ubuntu/xorg-hotkeys"
+  cmd-example "install-xorg-hotkeys-fix"
+  cmd-parse "$@" || return $CMD_RC
 
-  # pin version to avoid upgrade
-  f=/etc/apt/preferences.d/pin-xorg-hotkeys
-  sudo touch $f
-  echo "Package: *" | sudo tee --append $f
-  echo "Pin: release o=LP-PPA-nrbrtx-xorg-hotkeys" | sudo tee --append $f
-  echo "Pin-Priority: 1337" | sudo tee --append $f
+  sudo apt-add-repository -y ppa:nrbrtx/xorg-hotkeys
+  sudo apt-get update
+  sudo apt-get install -y --only-upgrade \
+    xserver-common xserver-xorg-core xserver-xorg-legacy
+
+  # Pin the version so a later upgrade does not undo the fix.
+  local pin=/etc/apt/preferences.d/pin-xorg-hotkeys
+  {
+    echo "Package: *"
+    echo "Pin: release o=LP-PPA-nrbrtx-xorg-hotkeys"
+    echo "Pin-Priority: 1337"
+  } | sudo tee "$pin" > /dev/null
 }

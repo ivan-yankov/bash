@@ -1,22 +1,8 @@
-function help-find-link {
-  echo "Find symbolic link in the current directory recursively."
-  echo
-  echo "Usage: find-link name"
-  echo "  name: link name or wildcard to search for wraped in double quotes"
-}
-
 function find-link {
-  if [  $# -eq 0  ]; then
-    help-find-link
-    return 1
-  fi
+  cmd-dsc "Find a symbolic link in the current directory recursively."
+  cmd-arg pattern string "Name or wildcard to search for; quote wildcards"
+  cmd-example 'find-link "*.txt"'
+  cmd-parse "$@" || return $CMD_RC
 
-  if [[  $1 == "-h"  ]]; then
-    help-find-link
-    return 0
-  fi
-
-  local what=$1
-  local where="."
-  find $where -type l -name "$what" 2>/dev/null
+  find . -type l -name "$ARG_pattern" 2>/dev/null
 }

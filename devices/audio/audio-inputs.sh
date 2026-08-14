@@ -1,14 +1,7 @@
-function help-audio-inputs {
-  echo "List audio inputs."
-  echo
-  echo "Usage: audio-inputs"
-}
-
 function audio-inputs {
-  if [[  $1 == "-h"  ]]; then
-    help-audio-inputs
-    return 0
-  fi
+  cmd-dsc "List the available audio inputs."
+  cmd-example "audio-inputs"
+  cmd-parse "$@" || return $CMD_RC
 
   pactl list short sources
 }

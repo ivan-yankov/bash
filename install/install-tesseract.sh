@@ -1,6 +1,7 @@
-# dsc:Install tesseract optical character recognition tool with dictionaries for english, bulgarian and russian languages.
 function install-tesseract {
-  sudo apt install -y tesseract-ocr
-  sudo apt install -y tesseract-ocr-bul
-  sudo apt install -y tesseract-ocr-rus
+  cmd-dsc "Install the tesseract OCR tool with English, Bulgarian and Russian dictionaries."
+  cmd-example "install-tesseract"
+  cmd-parse "$@" || return $CMD_RC
+
+  sudo apt install -y tesseract-ocr tesseract-ocr-bul tesseract-ocr-rus
 }

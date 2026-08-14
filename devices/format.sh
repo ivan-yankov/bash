@@ -1,30 +1,14 @@
-function help-format {
-  echo "Format drive."
-  echo "Drive must be unmount and specified by path, for example /dev/sdc1"
-  echo "Supported file systems are:"
-  echo "  ext4: ext4"
-  echo "  vfat: FAT32"
-  echo "  ntfs: NTFS"
-  echo
-  echo "Usage: format drive-path file-system label"
-}
-
 function format {
-  if [  $# -eq 0  ]; then
-    help-format
-    return 1
-  fi
+  cmd-dsc "Format a drive and set its label."
+  cmd-dsc "The drive must be unmounted and given by path, such as /dev/sdc1."
+  cmd-dsc "This destroys everything on the drive."
+  cmd-arg device string "Path to the drive"
+  cmd-arg filesystem "enum(ext4|vfat|ntfs)" "Filesystem to create: ext4, FAT32, NTFS"
+  cmd-arg name string "Label to set after formatting"
+  cmd-example "format /dev/sdc1 ext4 backup"
+  cmd-parse "$@" || return $CMD_RC
 
-  if [[  $1 == "-h"  ]]; then
-    help-format
-    return 0
-  fi
+  sudo "mkfs.$ARG_filesystem" "$ARG_device" || return
 
-  local dev=$1
-  local fs=$2
-  local label=$3
-
-  sudo mkfs.$fs $dev
-
-  label $dev $fs $label
+  label "$ARG_device" "$ARG_filesystem" "$ARG_name"
 }

@@ -1,5 +1,9 @@
-# dsc:Set ssh passphrase permanently for the system uptime session.
-# dsc:Asks for ssh passphrase
 function ssh-login {
-  ssh-add -k ~/.ssh/id_rsa
+  cmd-dsc "Add the ssh key to the agent for the rest of the uptime session."
+  cmd-dsc "Asks for the key passphrase."
+  cmd-arg key file "=$HOME/.ssh/id_rsa" "Private key to add"
+  cmd-example "ssh-login"
+  cmd-parse "$@" || return $CMD_RC
+
+  ssh-add -k "$ARG_key"
 }

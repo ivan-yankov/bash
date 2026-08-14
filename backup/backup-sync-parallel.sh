@@ -1,27 +1,15 @@
-function help-backup-sync-parallel {
-  echo "Backup directory parallel."
-  echo "Files which do not exist in the source and exist in the target will be deleted."
-  echo "Comparing is based on file timestamp."
-  echo "Follow links."
-  echo
-  echo "Usage: backup-update source-dir destination-dir"
-}
-
 function backup-sync-parallel {
-  if [  $# -eq 0  ]; then
-    help-backup-sync-parallel
-    return 1
-  fi
+  cmd-dsc "Back up a directory with rsync, one process per top level entry."
+  cmd-dsc "Files present in the target but not in the source are deleted."
+  cmd-dsc "Comparison is based on file checksum. Symbolic links are followed."
+  cmd-arg processes int "Number of rsync processes to run at once"
+  cmd-arg source dir "Directory to copy from"
+  cmd-arg target string "Directory to copy into"
+  cmd-arg rsync-options string... "Extra options passed through to rsync"
+  cmd-example "backup-sync-parallel 4 ~/data/ /mnt/backup/data"
+  cmd-parse "$@" || return $CMD_RC
 
-  if [[  $1 == "-h"  ]]; then
-    help-backup-sync-parallel
-    return 0
-  fi
-
-  local number_of_processes=$1
-  local src=$2
-  local dest=$3
-  local additional_arguments=$4
-
-  ls $src | xargs -n1 -P$number_of_processes -I% sudo rsync --delete --archive --checksum --copy-links $additional_arguments % $dest
+  ls "$ARG_source" | xargs -n1 "-P$ARG_processes" -I% \
+    sudo rsync --delete --archive --checksum --copy-links \
+      ${ARG_rsync_options[@]+"${ARG_rsync_options[@]}"} "%" "$ARG_target"
 }

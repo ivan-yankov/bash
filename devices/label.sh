@@ -1,41 +1,15 @@
-function help-label {
-  echo "Set drive label without formatting."
-  echo "Drive must be unmount and specified by path, for example /dev/sdc1"
-  echo "Supported file systems are:"
-  echo "  ext4: ext4"
-  echo "  vfat: FAT32"
-  echo "  ntfs: NTFS"
-  echo
-  echo "Usage: format drive-path file-system label"
-}
-
 function label {
-  if [  $# -eq 0  ]; then
-    help-label
-    return 1
-  fi
+  cmd-dsc "Set a drive label without formatting it."
+  cmd-dsc "The drive must be unmounted and given by path, such as /dev/sdc1."
+  cmd-arg device string "Path to the drive"
+  cmd-arg filesystem "enum(ext4|vfat|ntfs)" "Filesystem on the drive: ext4, FAT32, NTFS"
+  cmd-arg name string "Label to set"
+  cmd-example "label /dev/sdc1 ext4 backup"
+  cmd-parse "$@" || return $CMD_RC
 
-  if [[  $1 == "-h"  ]]; then
-    help-label
-    return 0
-  fi
-
-  local dev=$1
-  local fs=$2
-  local label=$3
-
-  case $fs in
-    "ext4")
-      sudo e2label $dev $label
-      ;;
-    "vfat")
-      sudo mlabel -i $dev ::$label
-      ;;
-    "ntfs")
-      sudo ntfslabel $dev $label
-      ;;
-    *)
-      echo "Unsupported file system $fs"
-      ;;
+  case "$ARG_filesystem" in
+    ext4) sudo e2label "$ARG_device" "$ARG_name" ;;
+    vfat) sudo mlabel -i "$ARG_device" "::$ARG_name" ;;
+    ntfs) sudo ntfslabel "$ARG_device" "$ARG_name" ;;
   esac
 }

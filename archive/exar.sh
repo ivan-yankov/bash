@@ -1,37 +1,19 @@
-function help-exar {
-  echo "Extract archive."
-  echo
-  echo "Usage: exar archive-file-name [target-dir]"
-  echo "Supported formats: zip, tar, tar.gz"
-}
-
 function exar {
-  if [  $# -eq 0  ]; then
-    help-exar
-    return 1
-  fi
+  cmd-dsc "Extract an archive."
+  cmd-dsc "The archive file extension selects the format."
+  cmd-dsc "Supported formats: zip, tar, tar.gz (also .tgz)."
+  cmd-arg archive file "Archive file to extract"
+  cmd-arg target dir =. "Directory to extract into"
+  cmd-example "exar backup.tar.gz"
+  cmd-example "exar photos.zip ./restored"
+  cmd-parse "$@" || return $CMD_RC
 
-  if [[  $1 == "-h"  ]]; then
-    help-exar
-    return 0
-  fi
-
-  local archive=$1
-  shift || true  # now $1 is optional target dir
-  local target="${1:-.}"
-
-  case "$archive" in
-    *.tar.gz|*.tgz)
-      tar -xvzf "$archive" -C "$target"
-      ;;
-    *.tar)
-      tar -xvf "$archive" -C "$target"
-      ;;
-    *.zip)
-      unzip "$archive" -d "$target"
-      ;;
+  case "$ARG_archive" in
+    *.tar.gz|*.tgz) tar -xvzf "$ARG_archive" -C "$ARG_target" ;;
+    *.tar)          tar -xvf  "$ARG_archive" -C "$ARG_target" ;;
+    *.zip)          unzip     "$ARG_archive" -d "$ARG_target" ;;
     *)
-      echo "Unsupported archive type: $archive" >&2
+      printf 'exar: Unsupported archive type: %s\n' "$ARG_archive" >&2
       return 2
       ;;
   esac

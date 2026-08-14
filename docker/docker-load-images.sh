@@ -1,19 +1,21 @@
-# dsc:Load docker images from .tar files.
-# arg:$1 directory with docker images
 function docker-load-images {
-  is-defined $1 || return 1
+  cmd-dsc "Load docker images from the .tar files written by docker-save-images"
+  cmd-dsc "and restore their repository and tag."
+  cmd-arg source dir "Directory holding the .tar files"
+  cmd-example "docker-load-images ~/docker-images"
+  cmd-parse "$@" || return $CMD_RC
 
-  local dir=$1
-
-  for f in $dir/*.tar; do
-    local id=$(file-name-without-ext $f)
-    local repo=$(cat $dir/$id.repository)
-    local tag=$(cat $dir/$id.tag)
+  local file id repo tag
+  for file in "$ARG_source"/*.tar; do
+    [ -f "$file" ] || continue
+    id=$(file-name-without-ext "$file")
+    repo=$(cat "$ARG_source/$id.repository")
+    tag=$(cat "$ARG_source/$id.tag")
 
     echo "Load image: $id"
-    docker load --input $f
+    docker load --input "$file"
 
     echo "Tag image: $id -> $repo:$tag"
-    docker tag $id $repo:$tag
+    docker tag "$id" "$repo:$tag"
   done
 }

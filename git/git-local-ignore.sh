@@ -1,48 +1,47 @@
-function help-git-local-ignore {
-  echo "Git ignore files locally."
-  echo "Files to ignore are listed in .git-local-ignore file in the project (git root) directory."
-  echo
-  echo "Usage: git-local-ignore flag"
-  echo "  flag: true to ignore files locally, false otherwise"
-}
-
 function git-local-ignore {
-  if [  $# -eq 0  ]; then
-    help-git-local-ignore
+  cmd-dsc "Ignore files locally, without changing .gitignore."
+  cmd-dsc "The files to ignore are listed one per line in a .git-local-ignore"
+  cmd-dsc "file in the repository root. Run this from inside the repository."
+  cmd-arg state "enum(on|off)" "Whether to start or stop ignoring the files"
+  cmd-example "git-local-ignore on"
+  cmd-example "git-local-ignore off"
+  cmd-parse "$@" || return $CMD_RC
+
+  local root
+  root=$(git rev-parse --show-toplevel 2>/dev/null) || {
+    echo "git-local-ignore: not inside a git repository" >&2
+    return 1
+  }
+
+  local list="$root/.git-local-ignore"
+  if [ ! -f "$list" ]; then
+    echo "git-local-ignore: no [$list] file" >&2
     return 1
   fi
 
-  if [[  $1 == "-h"  ]]; then
-    help-git-local-ignore
-    return 0
-  fi
+  local files=()
+  mapfile -t files < <(grep -v '^[[:space:]]*$' "$list")
 
-  local files=$(cat .git-local-ignore)
+  local exclude_file="$root/.git/info/exclude"
+  local file
 
-  local project_dir=~/data/repos/epg
-  local exclude_file=$project_dir/.git/info/exclude
-  local flag=$1
-
-  > $exclude_file
-
-  case $flag in
-    true)
-      for file in ${files[@]}; do
-        echo $file >> $exclude_file
+  case "$ARG_state" in
+    on)
+      : > "$exclude_file"
+      for file in "${files[@]}"; do
+        printf '%s\n' "$file" >> "$exclude_file"
       done
-      for file in ${files[@]}; do
-        printf "Ignoring file %s\n" $file
-        git update-index --skip-worktree $file
+      for file in "${files[@]}"; do
+        printf 'Ignoring file %s\n' "$file"
+        git update-index --skip-worktree "$file"
       done
       ;;
-    false)
-      for file in ${files[@]}; do
-        printf "Stop ignoring file %s\n" $file
-        git update-index --no-skip-worktree $file
+    off)
+      : > "$exclude_file"
+      for file in "${files[@]}"; do
+        printf 'Stop ignoring file %s\n' "$file"
+        git update-index --no-skip-worktree "$file"
       done
-      ;;
-    *)
-      printf "Unsupported flag %s\n" $flag
       ;;
   esac
 }

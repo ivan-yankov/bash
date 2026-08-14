@@ -1,30 +1,18 @@
-function help-lsar {
-  echo "Show archive contents."
-  echo
-  echo "Usage: lsar archive-file-name"
-  echo "Supported formats: zip, tar, tar.gz"
-}
-
 function lsar {
-  if [  $# -eq 0  ]; then
-    help-mkar
-    return 1
-  fi
+  cmd-dsc "Show the contents of an archive."
+  cmd-dsc "The archive file extension selects the format."
+  cmd-dsc "Supported formats: zip, tar, tar.gz (also .tgz)."
+  cmd-arg archive file "Archive file to list"
+  cmd-example "lsar backup.tar.gz"
+  cmd-parse "$@" || return $CMD_RC
 
-  if [[  $1 == "-h"  ]]; then
-    help-mkar
-    return 0
-  fi
-
-  local archive=$1
-
-  if [[  "$archive" == *.zip  ]]; then
-    unzip -l "$archive"
-  elif [[  "$archive" == *.tar  ]]; then
-    tar -tf "$archive"
-  elif [[  "$archive" == *.tar.gz  ]]; then
-    tar -ztf "$archive"
-  else
-    echo "Unsupported archive type."
-  fi
+  case "$ARG_archive" in
+    *.tar.gz|*.tgz) tar -ztf "$ARG_archive" ;;
+    *.tar)          tar -tf  "$ARG_archive" ;;
+    *.zip)          unzip -l "$ARG_archive" ;;
+    *)
+      printf 'lsar: Unsupported archive type: %s\n' "$ARG_archive" >&2
+      return 2
+      ;;
+  esac
 }

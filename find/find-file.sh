@@ -1,22 +1,8 @@
-function help-find-file {
-  echo "Find regular file in the current directory recursively."
-  echo
-  echo "Usage: find-file name"
-  echo "  name: file name or wildcard to search for wraped in double quotes"
-}
-
 function find-file {
-  if [  $# -eq 0  ]; then
-    help-find-file
-    return 1
-  fi
+  cmd-dsc "Find a regular file in the current directory recursively."
+  cmd-arg pattern string "Name or wildcard to search for; quote wildcards"
+  cmd-example 'find-file "*.txt"'
+  cmd-parse "$@" || return $CMD_RC
 
-  if [[  $1 == "-h"  ]]; then
-    help-find-file
-    return 0
-  fi
-
-  local what=$1
-  local where="."
-  find $where -type f -name "$what" 2>/dev/null
+  find . -type f -name "$ARG_pattern" 2>/dev/null
 }

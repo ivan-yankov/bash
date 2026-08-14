@@ -1,22 +1,9 @@
-function help-find-any {
-  echo "Find regular file, directory or symbolic link in the current directory recursively."
-  echo
-  echo "Usage: find-any name"
-  echo "  name: name or wildcard to search for wraped in double quotes"
-}
-
 function find-any {
-  if [  $# -eq 0  ]; then
-    help-find-any
-    return 1
-  fi
+  cmd-dsc "Find a regular file, directory or symbolic link in the current"
+  cmd-dsc "directory recursively."
+  cmd-arg pattern string "Name or wildcard to search for; quote wildcards"
+  cmd-example 'find-any "alpha*"'
+  cmd-parse "$@" || return $CMD_RC
 
-  if [[  $1 == "-h"  ]]; then
-    help-find-any
-    return 0
-  fi
-
-  local what=$1
-  local where="."
-  find $where -type f,d,l -name "$what" 2>/dev/null
+  find . -type f,d,l -name "$ARG_pattern" 2>/dev/null
 }

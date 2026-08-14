@@ -1,6 +1,8 @@
-# dsc:Check flac audio files for curruption.
-# arg:$1 directory with flac files
 function flac-check {
-  is-defined $1 || return 1
-  find $1 -type f -iname '*.flac' -print0 | xargs --null flac -wst
+  cmd-dsc "Check flac files in a directory for corruption, recursively."
+  cmd-arg target dir "Directory holding the flac files"
+  cmd-example "flac-check ~/music"
+  cmd-parse "$@" || return $CMD_RC
+
+  find "$ARG_target" -type f -iname '*.flac' -print0 | xargs --null flac -wst
 }

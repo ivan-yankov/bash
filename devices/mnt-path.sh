@@ -1,29 +1,18 @@
-function help-mnt-path {
-  echo "Mount external device at $DEVICE_MOUNT_PATH mount point."
-  echo
-  echo "Usage: mnt device-path mount-point"
-}
-
 function mnt-path {
-  if [  $# -eq 0  ]; then
-    help-mnt-path
-    return 1
-  fi
+  cmd-dsc "Mount a device given by path, under DEVICE_MOUNT_PATH."
+  cmd-arg device string "Path to the device, such as /dev/sdc1"
+  cmd-arg mount-point-name string "Name of the mount point to create"
+  cmd-env DEVICE_MOUNT_PATH "Directory the mount points are created under"
+  cmd-example "mnt-path /dev/sdc1 backup"
+  cmd-parse "$@" || return $CMD_RC
 
-  if [[  $1 == "-h"  ]]; then
-    help-mnt-path
-    return 0
-  fi
+  local mount_point=$DEVICE_MOUNT_PATH/$ARG_mount_point_name
 
-  local mount_path=$1
-  local mount_point_name=$2
-  local mount_point=$DEVICE_MOUNT_PATH/$mount_point_name
-
-  if [ -d $mount_point ]; then
-    echo "Mount point already exists."
+  if [ -d "$mount_point" ]; then
+    echo "Mount point already exists." >&2
     return 2
-  else
-    sudo mkdir $mount_point
-    sudo mount $mount_path $mount_point
   fi
+
+  sudo mkdir "$mount_point"
+  sudo mount "$ARG_device" "$mount_point"
 }

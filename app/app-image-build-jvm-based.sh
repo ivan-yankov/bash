@@ -1,80 +1,88 @@
-# dsc:Build JVM based AppImage.
-# dsc:https://www.booleanworld.com/creating-linux-apps-run-anywhere-appimage
-# dsc:Expects 'build' script in project directory. It is used to build the project code base.
-# dsc:Expects ini file(s) to be defined with build details.
-# arg:$1 ini file
-# arg:$2 cache directory
-# arg:$3 AppImage destination directory
 function app-image-build-jvm-based {
-  is-defined $1 && is-defined $2 && is-defined $3 || return 1
+  cmd-dsc "Build a JVM based AppImage from an ini file."
+  cmd-dsc "See https://www.booleanworld.com/creating-linux-apps-run-anywhere-appimage"
+  cmd-dsc "The JRE archive must already be in the cache directory, named"
+  cmd-dsc "jre-<version>.tar.gz. Use SDKMAN to obtain it."
+  cmd-arg ini file "ini file describing the build"
+  cmd-arg cache dir "Cache directory for the JRE and appimagetool"
+  cmd-arg target string "Path of the AppImage to produce"
+  cmd-example "app-image-build-jvm-based app.ini ~/.app-image-builder/cache ~/apps/app.AppImage"
+  cmd-parse "$@" || return $CMD_RC
 
-  ini_file=$1
-  cache_dir=$2
-  app_image=$3
+  local ini_file=$ARG_ini
+  local cache_dir=$ARG_cache
+  local app_image=$ARG_target
 
-  project_dir=$(dirname $ini_file)
-
+  local project_dir app_dir
+  project_dir=$(dirname "$ini_file")
   app_dir=$cache_dir/AppDir
 
-  mkdir -p $cache_dir
-    
-  jvm_version=$(get-ini-value JvmVersion $ini_file)
-  jvm_xms=$(get-ini-value JvmXms $ini_file)
-  jvm_xmx=$(get-ini-value JvmXmx $ini_file)
-  application_jars=$(get-ini-value ApplicationJars $ini_file)
-  main_class=$(get-ini-value MainClass $ini_file)
-  parameters=$(get-ini-value Parameters $ini_file)
-  application_name=$(get-ini-value ApplicationName $ini_file)
-  is_terminal_application=$(get-ini-value IsTerminalApplication $ini_file)
-  icon_file=$(get-ini-value IconFile $ini_file)
-  before=$(get-ini-value Before $ini_file)
-  after=$(get-ini-value After $ini_file)
+  mkdir -p "$cache_dir"
 
-  rm -rf $app_dir
-  mkdir $app_dir
-  mkdir $app_dir/jar
+  local jvm_version jvm_xms jvm_xmx application_jars main_class parameters
+  local application_name is_terminal_application icon_file before after
+  jvm_version=$(get-ini-value JvmVersion "$ini_file")
+  jvm_xms=$(get-ini-value JvmXms "$ini_file")
+  jvm_xmx=$(get-ini-value JvmXmx "$ini_file")
+  application_jars=$(get-ini-value ApplicationJars "$ini_file")
+  main_class=$(get-ini-value MainClass "$ini_file")
+  parameters=$(get-ini-value Parameters "$ini_file")
+  application_name=$(get-ini-value ApplicationName "$ini_file")
+  is_terminal_application=$(get-ini-value IsTerminalApplication "$ini_file")
+  icon_file=$(get-ini-value IconFile "$ini_file")
+  before=$(get-ini-value Before "$ini_file")
+  after=$(get-ini-value After "$ini_file")
+
+  rm -rf "$app_dir"
+  mkdir -p "$app_dir/jar"
 
   local app_run=$app_dir/AppRun
-  echo '#!/bin/sh' > $app_run
-  echo 'cd "$(dirname "$0")"' >> $app_run
-  echo "$before" >> $app_run
-  echo "./jre/bin/java -Xms$jvm_xms -Xmx$jvm_xmx -Dfile.encoding=UTF-8 -classpath \"jar/*\" $main_class $parameters" '"$@"' >> $app_run
-  echo "$after" >> $app_run
-  sudo chmod +x $app_run
+  {
+    echo '#!/bin/sh'
+    echo 'cd "$(dirname "$0")"'
+    echo "$before"
+    echo "./jre/bin/java -Xms$jvm_xms -Xmx$jvm_xmx -Dfile.encoding=UTF-8 -classpath \"jar/*\" $main_class $parameters \"\$@\""
+    echo "$after"
+  } > "$app_run"
+  chmod +x "$app_run"
 
   local desktop=$app_dir/$application_name.desktop
-  echo "[Desktop Entry]" > $desktop
-  echo "Type=Application" >> $desktop
-  echo "Name=$application_name" >> $desktop
-  echo "Icon=icon" >> $desktop
-  echo "Categories=Utility" >> $desktop
-  echo "Terminal=$is_terminal_application" >> $desktop
-  echo "X-AppImage-Version=0.1.09" >> $desktop
+  {
+    echo "[Desktop Entry]"
+    echo "Type=Application"
+    echo "Name=$application_name"
+    echo "Icon=icon"
+    echo "Categories=Utility"
+    echo "Terminal=$is_terminal_application"
+    echo "X-AppImage-Version=0.1.09"
+  } > "$desktop"
 
-  cp $icon_file $app_dir/icon.png
-  
-  cp $project_dir/$application_jars $app_dir/jar
-  
-  # download jre if necessary
+  cp "$icon_file" "$app_dir/icon.png"
+  cp "$project_dir/$application_jars" "$app_dir/jar"
+
+  # The java-* commands were removed when java management moved to SDKMAN, so
+  # the JRE archive has to be placed in the cache directory beforehand.
   local jre_archive=$cache_dir/jre-$jvm_version.tar.gz
-  if [ ! -f $jre_archive ]; then
-    java-download jre $jvm_version $cache_dir
+  if [ ! -f "$jre_archive" ]; then
+    echo "app-image-build-jvm-based: missing [$jre_archive]." >&2
+    echo "Obtain the JRE with SDKMAN and place the archive there." >&2
+    return 1
   fi
 
-  java-extract $jre_archive  
-  mv $cache_dir/jre-$jvm_version $app_dir/jre
-  
-  # detect machine's architecture
+  tar -xzf "$jre_archive" -C "$cache_dir" || return
+  mv "$cache_dir/jre-$jvm_version" "$app_dir/jre"
+
+  local arch
   arch=$(uname -m)
-  
-  # get the missing tools if necessary
-  if [ ! -f $cache_dir/appimagetool-$arch.AppImage ]; then
-    curl -L -o $cache_dir/appimagetool-$arch.AppImage https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-$arch.AppImage
-    chmod a+x $cache_dir/appimagetool-$arch.AppImage 
-  fi
-  
-  # build app-image
-  $cache_dir/appimagetool-$arch.AppImage $app_dir
 
-  sudo mv $project_dir/$application_name-$arch.AppImage $app_image
+  local tool=$cache_dir/appimagetool-$arch.AppImage
+  if [ ! -f "$tool" ]; then
+    curl -L -o "$tool" \
+      "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-$arch.AppImage" || return
+    chmod a+x "$tool"
+  fi
+
+  "$tool" "$app_dir" || return
+
+  sudo mv "$project_dir/$application_name-$arch.AppImage" "$app_image"
 }

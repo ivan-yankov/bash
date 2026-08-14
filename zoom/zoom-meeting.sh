@@ -1,7 +1,9 @@
-# dsc:Start zoom messenger and join meeting.
-# arg:$1 meeting url
 function zoom-meeting {
-  is-defined $1 || return 1
+  cmd-dsc "Restart the zoom client and join a meeting."
+  cmd-arg url string "Meeting url"
+  cmd-example "zoom-meeting https://zoom.us/j/123456789"
+  cmd-parse "$@" || return $CMD_RC
+
   pkill zoom
-  zoom --url=$1 &
+  zoom --url="$ARG_url" &
 }

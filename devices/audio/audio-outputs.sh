@@ -1,14 +1,7 @@
-function help-audio-outputs {
-  echo "List audio outputs."
-  echo
-  echo "Usage: audio-outputs"
-}
-
 function audio-outputs {
-  if [[  $1 == "-h"  ]]; then
-    help-audio-outputs
-    return 0
-  fi
+  cmd-dsc "List the available audio outputs."
+  cmd-example "audio-outputs"
+  cmd-parse "$@" || return $CMD_RC
 
   pactl list short sinks
 }

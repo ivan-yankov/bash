@@ -1,22 +1,11 @@
-function help-backup-sync {
-  echo "Backup directory."
-  echo "Files which do not exist in the source and exist in the target will be deleted."
-  echo "Comparing is based on file timestamp."
-  echo "Follow links."
-  echo
-  echo "Usage: backup-update source-dir destination-dir"
-}
-
 function backup-sync {
-  if [  $# -eq 0  ]; then
-    help-backup-sync
-    return 1
-  fi
+  cmd-dsc "Back up a directory with rsync, following symbolic links."
+  cmd-dsc "Files present in the target but not in the source are deleted."
+  cmd-dsc "Comparison is based on file timestamp."
+  cmd-arg source dir "Directory to copy from"
+  cmd-arg target string "Directory to copy into"
+  cmd-example "backup-sync ~/data/ /mnt/backup/data"
+  cmd-parse "$@" || return $CMD_RC
 
-  if [[  $1 == "-h"  ]]; then
-    help-backup-sync
-    return 0
-  fi
-
-  sudo rsync --delete --archive --copy-links "$@"
+  sudo rsync --delete --archive --copy-links "$ARG_source" "$ARG_target"
 }

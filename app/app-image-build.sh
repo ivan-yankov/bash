@@ -1,23 +1,24 @@
-# dsc:Build AppImage.
-# dsc:Expects 'build' script in project directory. It is used to build the project code base.
-# dsc:Expects ini file(s) to be defined with build details.
-# arg:$1 project directory
-# arg:$2 AppImage destination directory
 function app-image-build {
-  is-defined $1 && is-defined $2 || return 1
+  cmd-dsc "Build an AppImage for every ini file in a project directory."
+  cmd-dsc "Expects a 'build' script in the project directory, used to build the"
+  cmd-dsc "code base, and one or more ini files describing the build."
+  cmd-arg project dir "Project directory"
+  cmd-arg target string "Directory to write the AppImages into"
+  cmd-example "app-image-build ~/data/repos/myapp ~/apps"
+  cmd-parse "$@" || return $CMD_RC
 
-  local project_dir=$1
-  local app_image_dir=$2
   local cache_dir=~/.app-image-builder/cache
 
-  sudo mkdir -p $app_image_dir
+  sudo mkdir -p "$ARG_target"
 
-  $project_dir/build && \
+  "$ARG_project/build" || return
 
-  for ini_file in $project_dir/*.ini; do
-    local application_name=$(get-ini-value ApplicationName $ini_file)
-    local app_image=$app_image_dir/$application_name.AppImage
+  local ini_file application_name app_image
+  for ini_file in "$ARG_project"/*.ini; do
+    [ -f "$ini_file" ] || continue
+    application_name=$(get-ini-value ApplicationName "$ini_file")
+    app_image=$ARG_target/$application_name.AppImage
 
-    app-image-build-jvm-based $ini_file $cache_dir $app_image
+    app-image-build-jvm-based "$ini_file" "$cache_dir" "$app_image"
   done
 }
