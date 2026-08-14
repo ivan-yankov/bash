@@ -2,25 +2,47 @@
 
 A personal collection of shell commands, loaded into every interactive shell.
 
-Commands are grouped into directories for readability only. Grouping has no
-effect on execution: everything is loaded recursively and every command is
-available by name in the terminal.
+## Overview
 
-## Install
+Commands are bash functions, each in a file named after it. They are grouped
+into directories for readability only — grouping does not affect execution, and
+every command is available by name in the terminal.
 
-Add one line to `~/.bashrc`:
+A command declares what it takes with a few calls at the top of its own body.
+Those declarations produce its help text, argument parsing and validation, so
+each command is described exactly once and nothing has to read the source file
+to find out what it does. There is therefore no separate `help` command: every
+command answers `-h` itself.
+
+| Path | Contents |
+| --- | --- |
+| `init.sh` | entry point for `.bashrc` |
+| `lib/cmd.sh` | declaration API, parser, validators, help |
+| `shell/` | loader and shell helpers |
+| `test/` | test runner and suites |
+| `tools/` | declaration linter |
+| `ci/` | test container and its runner |
+| `Makefile` | test and lint targets |
+| everything else | command groups |
+
+Directories carrying a `.noload` marker are skipped by the loader, so the
+development trees never enter an interactive shell.
+
+## Installation
+
+Add one line to `~/.bashrc` or `~/.bash_profile` depends what you youse and the OS:
 
 ```bash
 source ~/data/repos/bash/init.sh && init
 ```
 
-Machine-specific commands go in `~/.bash/`, which is loaded recursively the
-same way. `~/.bash/env.sh` and `~/.bash/alias.sh` are sourced first if present.
-Set `BASH_LOCAL` before `init` to point that directory somewhere else.
-
 Requires bash 4 or newer.
 
-## Using commands
+Machine-specific commands go in `~/.bash/`, loaded recursively the same way.
+`~/.bash/env.sh` and `~/.bash/alias.sh` are sourced first if present. Set
+`BASH_LOCAL` before `init` to use a different directory.
+
+## Usage
 
 ```bash
 cmds              # list every command
@@ -29,30 +51,22 @@ cmds -d docker    # list them with descriptions
 mkar -h           # full help for one command
 ```
 
-Every command answers `-h` and `--help` itself. There is no separate `help`
-command, because a command's help is generated from the same declarations that
-parse its arguments.
-
-## Writing a command
+## Creating a command
 
 ```bash
 newsh convert-audio media    # create media/convert-audio.sh from the template
 ```
 
-A command is a bash function in a file named after it. It declares what it
-takes with a few calls at the top of its own body, and `cmd-parse` turns those
-declarations into help text, parsing and validation. Nothing ever reads the
-source file to find out what a command does.
+The template is a working command; edit its declarations and body:
 
 ```bash
 function convert-video {
   cmd-dsc  "Convert video to mp4 format for archiving."
-  cmd-dsc  "Add further cmd-dsc lines for detail a reader needs up front."
-  cmd-arg  input file                                     "Video file to convert"
-  cmd-arg  target dir =.                                  "Directory to write into"
-  cmd-opt  --vq "enum(lossless|high|medium|low)" =medium   "Video quality"
-  cmd-flag -r --replace                                   "Replace the original file"
-  cmd-env  FFMPEG_BIN                                     "ffmpeg binary to use"
+  cmd-arg  input file                                    "Video file to convert"
+  cmd-arg  target dir =.                                 "Directory to write into"
+  cmd-opt  --vq "enum(lossless|high|medium|low)" =medium  "Video quality"
+  cmd-flag -r --replace                                  "Replace the original file"
+  cmd-env  FFMPEG_BIN                                    "ffmpeg binary to use"
   cmd-example "convert-video a.mkv --vq high --replace"
   cmd-parse "$@" || return $CMD_RC
 
@@ -60,14 +74,7 @@ function convert-video {
 }
 ```
 
-Parsed values arrive as `ARG_<name>`, with `-` replaced by `_`, already
-validated. The single line `cmd-parse "$@" || return $CMD_RC` is the whole
-contract: it returns non-zero whenever the body should not run, and puts the
-command's intended exit code in `CMD_RC`.
-
-### Declarations
-
-| Call | Meaning |
+| Declaration | Meaning |
 | --- | --- |
 | `cmd-dsc <text>` | Description line. Repeatable. |
 | `cmd-arg <name> <type> [=default] <text>` | Positional parameter. |
@@ -75,20 +82,6 @@ command's intended exit code in `CMD_RC`.
 | `cmd-flag <flag>... <text>` | Option taking no value. |
 | `cmd-env <NAME> <text>` | Environment variable the command reads. |
 | `cmd-example <text>` | Example invocation. Repeatable. |
-
-A positional with a default is optional; one without is required, and required
-positionals must come before optional ones. A type ending in `...` collects the
-remaining arguments into an array and must be declared last.
-
-Options may be given several spellings: `cmd-flag -r --replace "..."` accepts
-both, and binds to the long one, here `ARG_replace`. Flags default to `false`
-and become `true` when passed.
-
-All declarations must appear **before** `cmd-parse`; anything after it is never
-seen. `--` ends option parsing, so a value that starts with `-` can still be
-passed as a positional.
-
-### Types
 
 | Type | Accepts |
 | --- | --- |
@@ -100,37 +93,40 @@ passed as a positional.
 | `newpath` | a path whose parent directory exists |
 | `enum(a\|b\|c)` | one of the listed values |
 
-A type containing `(` or `\|` **must be quoted**, because bash would otherwise
-read it as syntax:
+Rules worth knowing:
 
-```bash
-cmd-opt --vq "enum(lossless|high|medium|low)" =medium "Video quality"
-```
+- `cmd-parse "$@" || return $CMD_RC` is the whole contract. It returns non-zero
+  whenever the body should not run, and puts the intended exit code in `CMD_RC`.
+- Values arrive as `ARG_<name>`, with `-` replaced by `_`, already validated.
+- **Quote any type containing `(` or `|`** — bash reads `enum(a|b)` bare as a
+  syntax error.
+- A positional with a default is optional and must come after the required
+  ones. A type ending in `...` collects the rest into an array and comes last.
+- Options accept several spellings and bind to the long one: `-r --replace`
+  sets `ARG_replace`. Flags are `false` unless passed.
+- All declarations must precede `cmd-parse`; anything after it is ignored.
 
-## Development
+Check your work with `lint-cmds`, which reports file and function names that
+disagree, missing descriptions, declarations `cmd-parse` cannot use or that sit
+after it, and unquoted expansions that would split a value containing spaces.
+
+## Testing
 
 ```bash
 make test          # run the suite in a container
-make test-local    # run it directly on this machine
-make test-matrix   # run it on every supported distribution
 make lint          # check the command declarations
-make check         # lint + containerised tests
+make check         # both
+make test-local    # run the suite on this machine
+make test-matrix   # run it on every supported distribution
 make test F=archive   # only tests matching "archive"
 ```
 
 The container run is the one that counts: it has none of your `~/.bash`, mounts
-the repo read-only, and gives the test user passwordless sudo so commands that
-use `sudo` run unattended.
+the repo read-only, and gives the test user passwordless sudo so commands using
+`sudo` run unattended.
 
-`lint-cmds` is also a command in its own right. It reports commands whose file
-name and function name disagree, commands with no description, declarations
-`cmd-parse` could not use, declarations placed after `cmd-parse`, and unquoted
-expansions that would split a value containing spaces.
-
-### Tests
-
-Test files are `test/**/*.test.sh`. Every `test_*` function runs in its own
-subshell in a fresh temporary directory.
+Test files are `test/**/*.test.sh`. Each `test_*` function runs in its own
+subshell in a fresh temporary directory:
 
 ```bash
 setup() { load_commands; }
@@ -143,36 +139,92 @@ test_file_ext_returns_extension() {
 ```
 
 `run` captures stdout and stderr into `$output` and the exit code into `$rc`
-without aborting the test. Assertions available: `assert_eq`, `assert_ne`,
+without aborting the test. Assertions: `assert_eq`, `assert_ne`,
 `assert_contains`, `assert_not_contains`, `assert_matches`, `assert_rc`,
-`assert_rc_nonzero`, `assert_file`, `assert_dir`, plus `fail` and `skip`. A
-test can record several failures before finishing, and a test whose subshell
-dies before completing is reported as a failure rather than a pass.
+`assert_rc_nonzero`, `assert_file`, `assert_dir`, plus `fail` and `skip`. A test
+can record several failures, and one whose subshell dies is reported as a
+failure rather than a pass.
 
-There are three tiers:
+Three tiers:
 
-- **Contract tests** (`test/contract.test.sh`) apply to every command
-  automatically: it describes itself, `-h` works and prints usage, unknown
-  options are rejected, missing required arguments are reported, and help is
-  plain text when piped. All probes are rejected by `cmd-parse` before the
-  command body runs, which is what makes them safe for destructive commands
-  such as `docker-clear`.
-- **Library tests** (`test/lib/`) cover the declaration API, parser and
-  validators.
-- **Behaviour tests** (`test/behavior/`) cover commands with real output and no
-  user interaction.
+- **`test/contract.test.sh`** — applies to every command automatically: it
+  describes itself, `-h` prints usage, unknown options are rejected, missing
+  required arguments are reported, help is plain text when piped. Every probe is
+  rejected by `cmd-parse` before the body runs, which makes this safe even for
+  destructive commands such as `docker-clear`.
+- **`test/lib/`** — the declaration API, parser and validators.
+- **`test/behavior/`** — commands with real output and no user interaction.
 
-### Layout
+### Testing a new command
 
-Directories carrying a `.noload` marker are skipped by the loader, so they
-never enter an interactive shell.
+A new command joins the contract tier the moment it exists — nothing to wire up.
+That already covers its help, its rejection of unknown options and its required
+arguments. What it does not cover is what the command actually *does*, which is
+what a behaviour test is for.
 
-| Path | Contents |
-| --- | --- |
-| `init.sh` | entry point for `.bashrc` |
-| `lib/cmd.sh` | declaration API, parser, validators, help rendering |
-| `shell/` | loader and shell helpers |
-| `test/` | test runner and suites |
-| `tools/` | declaration linter |
-| `ci/` | test container and its runner |
-| everything else | command groups |
+Say you have just written `text/line-count.sh`:
+
+```bash
+function line-count {
+  cmd-dsc "Count the lines in a file."
+  cmd-arg file file "File to count"
+  cmd-flag -q --quiet "Print only the number"
+  cmd-parse "$@" || return $CMD_RC
+
+  local n
+  n=$(wc -l < "$ARG_file")
+  if [ "$ARG_quiet" == "true" ]; then echo "$n"; else echo "$ARG_file: $n"; fi
+}
+```
+
+Create `test/behavior/line-count.test.sh` next to the other behaviour suites.
+Name it after the command, or after the group when several related commands are
+tested together, as `archive.test.sh` does for `mkar`/`exar`/`lsar`.
+
+```bash
+setup() {
+  load_commands
+  printf 'one\ntwo\nthree\n' > notes.txt
+}
+
+test_line_count_reports_the_file_and_count() {
+  run line-count notes.txt
+  assert_rc 0 "$rc"
+  assert_eq "notes.txt: 3" "$output"
+}
+
+test_line_count_quiet_prints_only_the_number() {
+  run line-count notes.txt --quiet
+  assert_eq "3" "$output"
+}
+
+test_line_count_rejects_a_missing_file() {
+  run line-count absent.txt
+  assert_rc 1 "$rc"
+  assert_contains "$output" "must be an existing file"
+}
+```
+
+Then run just your suite:
+
+```bash
+make test-local F=line-count   # fast, on this machine
+make test F=line-count         # in the container
+```
+
+Notes:
+
+- `setup` must call `load_commands`, which loads the package the way an
+  interactive shell does. It runs before each test.
+- Every test starts in its own empty temporary directory, so build fixtures with
+  plain `printf`, `touch` and `mkdir` in `setup` or in the test itself. Nothing
+  needs cleaning up, and the repo is mounted read-only in the container to catch
+  a command that writes into the source tree.
+- Assert on behaviour you have decided, not on incidental formatting. Prefer
+  `assert_contains` over `assert_eq` for messages that may be reworded.
+- The filter matches a file name or a test function name, so `F=line-count` and
+  `F=quiet` both work.
+
+For a command that cannot run unattended — hardware, installers, GUI, network
+login — write no behaviour test. The contract tier still covers its interface,
+and that is the honest amount of coverage.
