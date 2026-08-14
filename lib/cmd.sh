@@ -102,6 +102,15 @@ function __cmd_color {
   printf '%s' "${!1:-}"
 }
 
+# Extra wording for an unknown option when the command has a varargs
+# parameter. Such a command exists to hand options to something else, and the
+# only thing standing between the user and that is the '--' separator, so the
+# error says which one to use rather than leaving them to read the help.
+function __cmd_passthrough_hint {
+  [ -n "${1:-}" ] || return 0
+  printf ' (options for <%s> must come after --)' "$1"
+}
+
 function __cmd_error {
   local name=$1 msg=$2
   printf '%s%s: %s%s\n' \
@@ -462,7 +471,7 @@ function cmd-parse {
             errors+=("$err")
           fi
         else
-          errors+=("unknown option [$key_part]")
+          errors+=("unknown option [$key_part]$(__cmd_passthrough_hint "$varargs_name")")
         fi
         shift
         continue
@@ -491,7 +500,7 @@ function cmd-parse {
       fi
 
       if [[ $token == -* ]] && [ ${#token} -gt 1 ]; then
-        errors+=("unknown option [$token]")
+        errors+=("unknown option [$token]$(__cmd_passthrough_hint "$varargs_name")")
         shift
         continue
       fi

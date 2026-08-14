@@ -102,6 +102,9 @@ Rules worth knowing:
   syntax error.
 - A positional with a default is optional and must come after the required
   ones. A type ending in `...` collects the rest into an array and comes last.
+- `--` ends option parsing: everything after it is taken as a positional, even
+  when it starts with a dash. That is how a wrapper hands options to the tool
+  underneath it, as in `backup-sync ~/data/ /mnt/backup -- --exclude '*.lock'`.
 - Options accept several spellings and bind to the long one: `-r --replace`
   sets `ARG_replace`. Flags are `false` unless passed.
 - All declarations must precede `cmd-parse`; anything after it is ignored.
