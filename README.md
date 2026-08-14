@@ -138,12 +138,89 @@ test_file_ext_returns_extension() {
 }
 ```
 
-`run` captures stdout and stderr into `$output` and the exit code into `$rc`
-without aborting the test. Assertions: `assert_eq`, `assert_ne`,
-`assert_contains`, `assert_not_contains`, `assert_matches`, `assert_rc`,
-`assert_rc_nonzero`, `assert_file`, `assert_dir`, plus `fail` and `skip`. A test
-can record several failures, and one whose subshell dies is reported as a
-failure rather than a pass.
+A test can record several failures before finishing, and one whose subshell
+dies is reported as a failure rather than a pass.
+
+### Running a command
+
+| Call | Effect |
+| --- | --- |
+| `run <command> [args...]` | Runs the command, capturing stdout **and** stderr into `$output` and the exit code into `$rc`. |
+| `run_eval '<shell string>'` | Same, but evaluates a string, so pipelines, redirections and other shell syntax work. |
+
+Neither aborts the test when the command fails, so you can assert on the
+failure. A command that does not exist gives `rc` 127.
+
+```bash
+run file-ext /a/b/report.txt          # $output="txt"  $rc=0
+run_eval 'cmds | grep -c docker'      # pipelines need run_eval
+```
+
+### Assertions
+
+Every assertion takes an optional final `message`, shown above the expected and
+actual values when it fails. Give one whenever the reason would not be obvious
+from the values alone.
+
+| Assertion | Passes when |
+| --- | --- |
+| `assert_eq <expected> <actual> [message]` | the two strings are equal |
+| `assert_ne <unexpected> <actual> [message]` | the two strings differ |
+| `assert_contains <haystack> <needle> [message]` | `haystack` contains `needle` as a substring |
+| `assert_not_contains <haystack> <needle> [message]` | `haystack` does not contain `needle` |
+| `assert_matches <haystack> <regex> [message]` | `haystack` matches the extended regex |
+| `assert_rc <expected> <actual> [message]` | the exit code equals `expected` |
+| `assert_rc_nonzero <actual> [message]` | the exit code is anything but 0 |
+| `assert_file <path> [message]` | `path` exists and is a regular file |
+| `assert_dir <path> [message]` | `path` exists and is a directory |
+
+Two more helpers are not assertions but belong here:
+
+| Call | Effect |
+| --- | --- |
+| `fail <message>` | Records a failure unconditionally. Use for a condition no assertion covers. Does not abort, so the test continues. |
+| `skip [reason]` | Marks the test skipped and reports the reason. Everything after it still runs, so call it and `return`. |
+
+**Mind the argument order** — it differs between the two families:
+
+- `assert_eq`, `assert_ne` and `assert_rc` take **expected first**, actual
+  second: `assert_rc 0 "$rc"`.
+- `assert_contains`, `assert_not_contains` and `assert_matches` take the
+  **subject first**, pattern second: `assert_contains "$output" "Usage"`.
+
+Getting these backwards still compares the right things, but the failure report
+labels them the wrong way round and reads as nonsense.
+
+Notes on individual assertions:
+
+- `assert_matches` is unanchored, so `assert_matches "$output" "^hello"` is how
+  you pin it to the start. It uses bash `=~`, so the pattern is an extended
+  regular expression, not a glob.
+- `assert_contains` is the right default for messages that might be reworded;
+  reserve `assert_eq` for output you have deliberately fixed.
+- `assert_file` fails for a directory and `assert_dir` fails for a file, so they
+  check the type as well as existence.
+- `assert_rc_nonzero` takes only the actual code, since there is nothing to
+  compare against. Prefer `assert_rc 2 "$rc"` when the command documents a
+  specific code.
+
+```bash
+test_example_shows_each_kind() {
+  printf 'one\ntwo\n' > notes.txt
+
+  run wc -l notes.txt
+  assert_rc 0 "$rc"
+  assert_contains "$output" "2"
+  assert_matches "$output" "^ *2 notes\.txt$"
+  assert_file notes.txt
+
+  run wc -l absent.txt
+  assert_rc_nonzero "$rc"
+  assert_not_contains "$output" "2"
+
+  [ -s notes.txt ] || fail "the fixture should not be empty"
+}
+```
 
 Three tiers:
 
@@ -215,7 +292,9 @@ make test F=line-count         # in the container
 Notes:
 
 - `setup` must call `load_commands`, which loads the package the way an
-  interactive shell does. It runs before each test.
+  interactive shell does. It runs before each test. A `teardown` may be defined
+  the same way and runs after each test, though it is rarely needed because the
+  temporary directory is discarded anyway.
 - Every test starts in its own empty temporary directory, so build fixtures with
   plain `printf`, `touch` and `mkdir` in `setup` or in the test itself. Nothing
   needs cleaning up, and the repo is mounted read-only in the container to catch
